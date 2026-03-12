@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// AST.h - Abstract Syntax Tree node definitions with fast NodeType dispatch
+// nexo v1.0 beta - natural english programming language
+// ast.h - abstract syntax tree node definitions with fast nodetype dispatch
 #pragma once
 
 #include "Common.h"
@@ -8,48 +8,48 @@
 #include <string>
 #include <unordered_map>
 
-// NodeType enum for high-performance switch-based dispatch
+// nodetype enum for high-performance switch-based dispatch
 enum class NodeType {
-    // Literals
+    // literals
     Number, Text, Bool, Identifier, None,
-    // Expressions
+    // expressions
     BinaryOp, UnaryOp, Array, Map, Range,
-    // Variables
+    // variables
     Set, SetField, GetField,
-    // I/O
+    // i/o
     Display, UserInput,
-    // Control flow
+    // control flow
     If, While, Iterate, ForEach, Repeat,
     Break, Continue, Exit,
-    // Functions
+    // functions
     FunctionDef, Call, CallFunc, Lambda, Return,
-    // Array/List
+    // array/list
     AddToArray, RemoveFromArray, GetValueAt, GetLast, GetFirst,
     LengthOf, GetIndex, Sort, Reverse, Unique,
     Max, Min, Sum, Average, Keys, Values,
-    // Strings
+    // strings
     Split, Join, JoinedWith, Replace,
     Uppercase, Lowercase, Trim,
     Substring, Contains, StartsWith, EndsWith,
-    // Math
+    // math
     MathOp, Random,
-    // Files
+    // files
     ReadFile, WriteFile, AppendFile, FileExists, DeleteFile,
-    // Time
+    // time
     CurrentTime, Date, Wait,
-    // Error handling
+    // error handling
     TryCatch,
-    // HTTP/JSON
+    // http/json
     HttpGet, HttpPost, Parse, Stringify,
-    // Concurrency
+    // concurrency
     Spawn, StopTask, CreateChannel, SendToChannel, ReceiveFromChannel, Await,
-    // GUI
+    // gui
     GUIWindow, GUIDrawText, GUIDrawRect, GUIDrawCircle, GUIButton, GUITextInput, GUIClose,
-    // Misc
+    // misc
     Import, LoadNative, RunCommand, GetEnvVar, Trace, CreateObject
 };
 
-// Base AST node with type tag for fast dispatch
+// base ast node with type tag for fast dispatch
 struct ASTNode {
     const NodeType nodeType;
     int line = 0;
@@ -57,9 +57,7 @@ struct ASTNode {
     virtual ~ASTNode() = default;
 };
 
-// ============================================================================
-// LITERAL NODES
-// ============================================================================
+// literal nodes
 
 struct NumberNode : ASTNode {
     double value;
@@ -85,9 +83,7 @@ struct NoneNode : ASTNode {
     NoneNode() : ASTNode(NodeType::None) {}
 };
 
-// ============================================================================
-// EXPRESSION NODES
-// ============================================================================
+// expression nodes
 
 struct BinaryOpNode : ASTNode {
     std::shared_ptr<ASTNode> left;
@@ -118,9 +114,7 @@ struct RangeNode : ASTNode {
     RangeNode() : ASTNode(NodeType::Range) {}
 };
 
-// ============================================================================
-// VARIABLE NODES
-// ============================================================================
+// variable nodes
 
 struct SetNode : ASTNode {
     std::string name;
@@ -141,9 +135,7 @@ struct GetFieldNode : ASTNode {
     GetFieldNode() : ASTNode(NodeType::GetField) {}
 };
 
-// ============================================================================
-// I/O NODES
-// ============================================================================
+// i/o nodes
 
 struct DisplayNode : ASTNode {
     std::shared_ptr<ASTNode> value;
@@ -157,9 +149,7 @@ struct UserInputNode : ASTNode {
     UserInputNode() : ASTNode(NodeType::UserInput) {}
 };
 
-// ============================================================================
-// CONTROL FLOW NODES
-// ============================================================================
+// control flow nodes
 
 struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
@@ -199,9 +189,7 @@ struct BreakNode : ASTNode { BreakNode() : ASTNode(NodeType::Break) {} };
 struct ContinueNode : ASTNode { ContinueNode() : ASTNode(NodeType::Continue) {} };
 struct ExitNode : ASTNode { ExitNode() : ASTNode(NodeType::Exit) {} };
 
-// ============================================================================
-// FUNCTION NODES
-// ============================================================================
+// function nodes
 
 struct FunctionDefNode : ASTNode {
     std::string name;
@@ -233,9 +221,7 @@ struct ReturnNode : ASTNode {
     ReturnNode() : ASTNode(NodeType::Return) {}
 };
 
-// ============================================================================
-// ARRAY/LIST NODES
-// ============================================================================
+// array/list nodes
 
 struct AddToArrayNode : ASTNode {
     std::shared_ptr<ASTNode> value;
@@ -298,9 +284,7 @@ struct AverageNode : ASTNode { std::string arrayName; AverageNode() : ASTNode(No
 struct KeysNode : ASTNode { std::string mapName; KeysNode() : ASTNode(NodeType::Keys) {} };
 struct ValuesNode : ASTNode { std::string mapName; ValuesNode() : ASTNode(NodeType::Values) {} };
 
-// ============================================================================
-// STRING NODES
-// ============================================================================
+// string nodes
 
 struct SplitNode : ASTNode {
     std::shared_ptr<ASTNode> text;
@@ -356,9 +340,7 @@ struct EndsWithNode : ASTNode {
     EndsWithNode() : ASTNode(NodeType::EndsWith) {}
 };
 
-// ============================================================================
-// MATH NODES
-// ============================================================================
+// math nodes
 
 struct MathOpNode : ASTNode {
     std::string op;
@@ -373,9 +355,7 @@ struct RandomNode : ASTNode {
     RandomNode() : ASTNode(NodeType::Random) {}
 };
 
-// ============================================================================
-// FILE NODES
-// ============================================================================
+// file nodes
 
 struct ReadFileNode : ASTNode {
     std::shared_ptr<ASTNode> filepath;
@@ -405,9 +385,7 @@ struct DeleteFileNode : ASTNode {
     DeleteFileNode() : ASTNode(NodeType::DeleteFile) {}
 };
 
-// ============================================================================
-// TIME NODES
-// ============================================================================
+// time nodes
 
 struct CurrentTimeNode : ASTNode { CurrentTimeNode() : ASTNode(NodeType::CurrentTime) {} };
 
@@ -421,9 +399,7 @@ struct WaitNode : ASTNode {
     WaitNode() : ASTNode(NodeType::Wait) {}
 };
 
-// ============================================================================
-// ERROR HANDLING NODES
-// ============================================================================
+// error handling nodes
 
 struct TryCatchNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> tryBlock;
@@ -432,9 +408,7 @@ struct TryCatchNode : ASTNode {
     TryCatchNode() : ASTNode(NodeType::TryCatch) {}
 };
 
-// ============================================================================
-// HTTP/JSON NODES
-// ============================================================================
+// http/json nodes
 
 struct HttpGetNode : ASTNode {
     std::shared_ptr<ASTNode> url;
@@ -457,9 +431,7 @@ struct StringifyNode : ASTNode {
     StringifyNode() : ASTNode(NodeType::Stringify) {}
 };
 
-// ============================================================================
-// CONCURRENCY NODES
-// ============================================================================
+// concurrency nodes
 
 struct SpawnNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -495,9 +467,7 @@ struct AwaitNode : ASTNode {
     AwaitNode() : ASTNode(NodeType::Await) {}
 };
 
-// ============================================================================
-// GUI NODES
-// ============================================================================
+// gui nodes
 
 struct GUIWindowNode : ASTNode {
     std::shared_ptr<ASTNode> title;
@@ -555,9 +525,7 @@ struct GUITextInputNode : ASTNode {
 
 struct GUICloseNode : ASTNode { GUICloseNode() : ASTNode(NodeType::GUIClose) {} };
 
-// ============================================================================
-// MISCELLANEOUS NODES
-// ============================================================================
+// miscellaneous nodes
 
 struct ImportNode : ASTNode {
     std::shared_ptr<ASTNode> filepath;

@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Interpreter.h - Interpreter declaration
+// nexo v1.0 beta - natural english programming language
+// interpreter.h - interpreter declaration
 #pragma once
 
 #include "Common.h"
@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-// Control flow exceptions
+// control flow exceptions
 class ReturnException : public std::exception {
 public:
     std::shared_ptr<Value> value;
@@ -27,14 +27,14 @@ private:
     std::string currentTaskName;
     std::vector<std::string> callStack;
     
-    // Check if current task should stop
+    // check if current task should stop
     void checkTaskStatus();
     
-    // Core evaluation
+    // core evaluation
     std::shared_ptr<Value> eval(std::shared_ptr<ASTNode> node);
     void execute(std::shared_ptr<ASTNode> node);
     
-    // Helper methods
+    // helper methods
     std::string httpGet(const std::string& url);
     std::string httpPost(const std::string& url, const std::string& body);
     std::shared_ptr<Value> parseJson(const std::string& json);
@@ -48,7 +48,7 @@ public:
     Interpreter();
     void run(const std::vector<std::shared_ptr<ASTNode>>& program);
     
-    // For spawned tasks
+    // for spawned tasks
     void setEnvironment(std::shared_ptr<Environment> e) { env = e; }
     void setTaskName(const std::string& name) { currentTaskName = name; }
 };

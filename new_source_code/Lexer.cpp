@@ -1,45 +1,45 @@
-// Nexo v5.0 - Natural English Programming Language
-// Lexer.cpp - Tokenizer implementation
+// nexo v1.0 beta - natural english programming language
+// lexer.cpp - tokenizer implementation
 #include "Lexer.h"
 #include <stdexcept>
 #include <algorithm>
 
 Lexer::Lexer(const std::string& src) : source(src) {
-    // Initialize keywords map
+    // initialize keywords map
     keywords = {
-        // Boolean
+        // boolean
         {"true", T_TRUE}, {"false", T_FALSE},
         
-        // Core keywords
+        // core keywords
         {"set", T_SET}, {"the", T_THE}, {"to", T_TO}, {"an", T_AN}, {"a", T_A},
         {"is", T_IS}, {"are", T_ARE}, {"it", T_IT}, {"in", T_IN}, {"of", T_OF},
         {"at", T_AT}, {"by", T_BY}, {"with", T_WITH}, {"and", T_AND}, {"or", T_OR},
         {"not", T_NOT}, {"as", T_AS}, {"for", T_FOR}, {"from", T_FROM},
         {"through", T_THROUGH}, {"using", T_USING}, {"called", T_CALLED}, {"named", T_NAMED},
         
-        // Display and input
+        // display and input
         {"display", T_DISPLAY}, {"message", T_MESSAGE}, {"ask", T_ASK}, {"store", T_STORE},
         {"user", T_USER}, {"prompt", T_PROMPT}, {"name", T_NAME},
         
-        // Conditionals
+        // conditionals
         {"if", T_IF}, {"then", T_THEN}, {"else", T_ELSE}, {"otherwise", T_OTHERWISE},
         {"do", T_DO}, {"following", T_FOLLOWING}, {"end", T_END},
         
-        // Loops
+        // loops
         {"while", T_WHILE}, {"repeat", T_REPEAT}, {"times", T_TIMES},
         {"iterate", T_ITERATE}, {"each", T_EACH}, {"loop", T_LOOP},
         {"break", T_BREAK}, {"continue", T_CONTINUE}, {"exit", T_EXIT},
         
-        // Functions
+        // functions
         {"define", T_DEFINE}, {"function", T_FUNCTION}, {"parameter", T_PARAMETER},
         {"parameters", T_PARAMETERS}, {"call", T_CALL}, {"return", T_RETURN},
         
-        // Comparisons
+        // comparisons
         {"equal", T_EQUAL}, {"same", T_SAME}, {"exactly", T_EXACTLY},
         {"greater", T_GREATER}, {"less", T_LESS}, {"more", T_MORE}, {"fewer", T_FEWER},
         {"than", T_THAN}, {"least", T_LEAST}, {"most", T_MOST}, {"different", T_DIFFERENT},
         
-        // Math
+        // math
         {"plus", T_PLUS}, {"minus", T_MINUS}, {"multiplied", T_MULTIPLY},
         {"divided", T_DIVIDE}, {"modulo", T_MODULO}, {"remainder", T_MODULO},
         {"floor", T_FLOOR}, {"ceiling", T_CEILING}, {"round", T_ROUND},
@@ -48,7 +48,7 @@ Lexer::Lexer(const std::string& src) : source(src) {
         {"cosine", T_COSINE}, {"tangent", T_TANGENT}, {"random", T_RANDOM},
         {"negative", T_NEGATIVE}, {"value", T_VALUE},
         
-        // Arrays/Lists
+        // arrays/lists
         {"list", T_LIST}, {"array", T_ARRAY}, {"empty", T_EMPTY},
         {"containing", T_CONTAINING}, {"add", T_ADD}, {"remove", T_REMOVE},
         {"get", T_GET}, {"first", T_FIRST}, {"second", T_SECOND}, {"third", T_THIRD},
@@ -57,63 +57,63 @@ Lexer::Lexer(const std::string& src) : source(src) {
         {"join", T_JOIN}, {"joined", T_JOINED}, {"split", T_SPLIT},
         {"maximum", T_MAXIMUM}, {"minimum", T_MINIMUM}, {"sum", T_SUM}, {"average", T_AVERAGE},
         
-        // Objects
+        // objects
         {"object", T_OBJECT}, {"create", T_CREATE}, {"new", T_NEW},
         {"properties", T_PROPERTIES}, {"property", T_PROPERTY},
         {"keys", T_KEYS}, {"values", T_VALUES},
         
-        // Strings
+        // strings
         {"text", T_TEXT}, {"uppercase", T_UPPERCASE}, {"lowercase", T_LOWERCASE},
         {"trim", T_TRIM}, {"substring", T_SUBSTRING}, {"replace", T_REPLACE},
         {"contains", T_CONTAINS}, {"starts", T_STARTS}, {"ends", T_ENDS},
         
-        // Files
+        // files
         {"file", T_FILE}, {"read", T_READ}, {"write", T_WRITE},
         {"append", T_APPEND}, {"delete", T_DELETE}, {"exists", T_EXISTS},
         {"into", T_INTO}, {"lines", T_LINES},
         
-        // Time
+        // time
         {"current", T_CURRENT}, {"time", T_TIME}, {"year", T_YEAR},
         {"month", T_MONTH}, {"day", T_DAY}, {"hour", T_HOUR},
         {"minute", T_MINUTE}, {"seconds", T_SECONDS}, {"second", T_SECONDS}, {"wait", T_WAIT},
         
-        // Error handling
+        // error handling
         {"try", T_TRY}, {"error", T_ERROR}, {"occurs", T_OCCURS},
         
-        // HTTP/JSON
+        // http/json
         {"http", T_HTTP}, {"send", T_SEND}, {"request", T_REQUEST},
         {"response", T_RESPONSE}, {"parse", T_PARSE}, {"stringify", T_STRINGIFY}, {"json", T_JSON},
         
-        // Concurrency
+        // concurrency
         {"background", T_BACKGROUND}, {"task", T_TASK}, {"channel", T_CHANNEL},
         {"receive", T_RECEIVE}, {"stop", T_STOP}, {"finish", T_FINISH}, {"await", T_AWAIT},
         
-        // GUI
+        // gui
         {"open", T_OPEN}, {"close", T_CLOSE}, {"gui", T_GUI}, {"window", T_WINDOW},
         {"size", T_SIZE}, {"draw", T_DRAW}, {"button", T_BUTTON}, {"label", T_LABEL},
         {"input", T_INPUT}, {"placeholder", T_PLACEHOLDER}, {"position", T_POSITION},
         {"rectangle", T_RECTANGLE}, {"circle", T_CIRCLE}, {"radius", T_RADIUS},
         {"color", T_COLOR}, {"when", T_WHEN}, {"clicked", T_CLICKED}, {"code", T_CODE},
         
-        // Colors
+        // colors
         {"red", T_RED}, {"green", T_GREEN}, {"blue", T_BLUE},
         {"white", T_WHITE}, {"black", T_BLACK}, {"yellow", T_YELLOW},
         {"orange", T_ORANGE}, {"purple", T_PURPLE}, {"pink", T_PINK}, {"gray", T_GRAY},
         
-        // Modules
+        // modules
         {"load", T_LOAD}, {"native", T_NATIVE}, {"import", T_IMPORT},
         
-        // Misc
+        // misc
         {"environment", T_ENVIRONMENT}, {"variable", T_VARIABLE},
         {"run", T_RUN}, {"capture", T_CAPTURE}, {"output", T_OUTPUT},
         {"trace", T_TRACE}, {"range", T_RANGE}, {"number", T_NUMBER_TYPE},
         {"integer", T_INTEGER}, {"boolean", T_BOOLEAN}, {"there", T_THERE},
         
-        // Comments
+        // comments
         {"ignore", T_IGNORE}, {"this", T_THIS}, {"line", T_LINE}, {"all", T_ALL},
     };
     
-    // Noise words to be filtered out
+    // noise words to be filtered out
     noiseWords = {"please", "can", "you", "new", "variable"};
 }
 
@@ -146,17 +146,17 @@ void Lexer::skipWhitespace() {
 }
 
 void Lexer::skipComment() {
-    // Skip to end of line
+    // skip to end of line
     while (!isAtEnd() && peek() != '\n') {
         advance();
     }
 }
 
 void Lexer::skipMultilineComment() {
-    // Look for "end ignore"
+    // look for "end ignore"
     std::string endMarker = "end ignore";
     while (!isAtEnd()) {
-        // Check if we're at "end ignore"
+        // check if we're at "end ignore"
         if (pos + endMarker.length() <= source.size()) {
             std::string check = source.substr(pos, endMarker.length());
             std::transform(check.begin(), check.end(), check.begin(), ::tolower);
@@ -218,7 +218,7 @@ std::string Lexer::processEscapeSequences(const std::string& s) {
 }
 
 Token Lexer::readString() {
-    advance(); // Skip opening quote
+    advance(); // skip opening quote
     std::string str;
     while (!isAtEnd() && peek() != '"') {
         if (peek() == '\\' && peekNext() == '"') {
@@ -247,7 +247,7 @@ Token Lexer::readIdentifier() {
         id += advance();
     }
     
-    // Check for possessive form (user's)
+    // check for possessive form (user's)
     if (peek() == '\'' && peekNext() == 's') {
         std::string lower = id;
         std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
@@ -261,11 +261,11 @@ Token Lexer::readIdentifier() {
         return tok;
     }
     
-    // Convert to lowercase for keyword lookup
+    // convert to lowercase for keyword lookup
     std::string lower = id;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
     
-    // Check if it's a keyword
+    // check if it's a keyword
     auto it = keywords.find(lower);
     if (it != keywords.end()) {
         return makeToken(it->second, id);
@@ -281,7 +281,7 @@ std::vector<Token> Lexer::tokenize() {
         skipWhitespace();
         if (isAtEnd()) break;
         
-        // Check for "ignore this line:" comment
+        // check for "ignore this line:" comment
         if (pos + 17 <= source.size()) {
             std::string check = source.substr(pos, 17);
             std::transform(check.begin(), check.end(), check.begin(), ::tolower);
@@ -292,7 +292,7 @@ std::vector<Token> Lexer::tokenize() {
             }
         }
         
-        // Check for "ignore all this:" multi-line comment
+        // check for "ignore all this:" multi-line comment
         if (pos + 16 <= source.size()) {
             std::string check = source.substr(pos, 16);
             std::transform(check.begin(), check.end(), check.begin(), ::tolower);
@@ -303,7 +303,7 @@ std::vector<Token> Lexer::tokenize() {
             }
         }
         
-        // Check for # comment
+        // check for # comment
         if (peek() == '#') {
             skipComment();
             continue;
@@ -311,33 +311,33 @@ std::vector<Token> Lexer::tokenize() {
         
         char c = peek();
         
-        // Numbers
+        // numbers
         if (isDigit(c)) {
             tokens.push_back(readNumber());
             continue;
         }
         
-        // Strings
+        // strings
         if (c == '"') {
             tokens.push_back(readString());
             continue;
         }
         
-        // Identifiers and keywords
+        // identifiers and keywords
         if (isAlpha(c)) {
             Token tok = readIdentifier();
             
-            // Check for possessive - emit DOT token
+            // check for possessive - emit dot token
             if (!tokens.empty() && tokens.back().type == T_IDENTIFIER && peek() == '\'') {
-                // Already handled in readIdentifier
+                // already handled in readidentifier
             }
             
-            // Skip noise words
+            // skip noise words
             if (isNoiseWord(tok.value)) {
                 continue;
             }
             
-            // Check for possessive after identifier
+            // check for possessive after identifier
             if (source.length() > pos + 1 && source[pos] == '\'' && source[pos+1] == 's') {
                 tokens.push_back(tok);
                 advance(); // '
@@ -350,7 +350,7 @@ std::vector<Token> Lexer::tokenize() {
             continue;
         }
         
-        // Operators and punctuation
+        // operators and punctuation
         switch (c) {
             case '+': advance(); tokens.push_back(makeToken(T_PLUS, "+")); break;
             case '-': advance(); tokens.push_back(makeToken(T_MINUS, "-")); break;
@@ -365,7 +365,7 @@ std::vector<Token> Lexer::tokenize() {
             case ':': advance(); tokens.push_back(makeToken(T_COLON, ":")); break;
             case '.': advance(); tokens.push_back(makeToken(T_DOT, ".")); break;
             default:
-                // Skip unknown characters
+                // skip unknown characters
                 advance();
                 break;
         }

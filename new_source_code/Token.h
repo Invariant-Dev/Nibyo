@@ -1,24 +1,24 @@
-// Nexo v5.0 - Natural English Programming Language
-// Token.h - Token types and structures
+// nexo v1.0 beta - natural english programming language
+// token.h - token types and structures
 #pragma once
 
 #include <string>
 
-// Token types - all English keywords for natural language syntax
+// token types - all english keywords for natural language syntax
 enum TokenType {
-    // End of file
+    // end of file
     T_EOF,
     
-    // Literals
+    // literals
     T_NUMBER,           // 123, 3.14
     T_STRING,           // "hello"
     T_IDENTIFIER,       // variable names
     
-    // Boolean literals
+    // boolean literals
     T_TRUE,             // true
     T_FALSE,            // false
     
-    // Core keywords
+    // core keywords
     T_SET,              // set
     T_THE,              // the
     T_TO,               // to
@@ -43,7 +43,7 @@ enum TokenType {
     T_CALLED,           // called
     T_NAMED,            // named
     
-    // Display and input
+    // display and input
     T_DISPLAY,          // display
     T_MESSAGE,          // message
     T_ASK,              // ask
@@ -52,7 +52,7 @@ enum TokenType {
     T_USER,             // user
     T_PROMPT,           // prompt
     
-    // Conditionals
+    // conditionals
     T_IF,               // if
     T_THEN,             // then
     T_ELSE,             // else
@@ -61,7 +61,7 @@ enum TokenType {
     T_FOLLOWING,        // following
     T_END,              // end
     
-    // Loops
+    // loops
     T_WHILE,            // while
     T_REPEAT,           // repeat
     T_TIMES,            // times
@@ -72,7 +72,7 @@ enum TokenType {
     T_CONTINUE,         // continue
     T_EXIT,             // exit
     
-    // Functions
+    // functions
     T_DEFINE,           // define
     T_FUNCTION,         // function
     T_PARAMETER,        // parameter
@@ -80,7 +80,7 @@ enum TokenType {
     T_CALL,             // call
     T_RETURN,           // return
     
-    // Comparisons
+    // comparisons
     T_EQUAL,            // equal
     T_SAME,             // same
     T_EXACTLY,          // exactly
@@ -93,7 +93,7 @@ enum TokenType {
     T_MOST,             // most
     T_DIFFERENT,        // different
     
-    // Math keywords
+    // math keywords
     T_PLUS,             // plus, +
     T_MINUS,            // minus, -
     T_MULTIPLY,         // multiplied, times (as operator)
@@ -114,7 +114,7 @@ enum TokenType {
     T_NEGATIVE,         // negative
     T_VALUE,            // value
     
-    // Arrays/Lists
+    // arrays/lists
     T_LIST,             // list
     T_ARRAY,            // array
     T_EMPTY,            // empty
@@ -139,7 +139,7 @@ enum TokenType {
     T_SUM,              // sum
     T_AVERAGE,          // average
     
-    // Objects/Maps
+    // objects/maps
     T_OBJECT,           // object
     T_CREATE,           // create
     T_NEW,              // new
@@ -148,7 +148,7 @@ enum TokenType {
     T_KEYS,             // keys
     T_VALUES,           // values
     
-    // Strings
+    // strings
     T_TEXT,             // text
     T_UPPERCASE,        // uppercase
     T_LOWERCASE,        // lowercase
@@ -159,7 +159,7 @@ enum TokenType {
     T_STARTS,           // starts
     T_ENDS,             // ends
     
-    // Files
+    // files
     T_FILE,             // file
     T_READ,             // read
     T_WRITE,            // write
@@ -169,7 +169,7 @@ enum TokenType {
     T_INTO,             // into
     T_LINES,            // lines
     
-    // Time and date
+    // time and date
     T_CURRENT,          // current
     T_TIME,             // time
     T_YEAR,             // year
@@ -180,13 +180,13 @@ enum TokenType {
     T_SECONDS,          // seconds
     T_WAIT,             // wait
     
-    // Error handling
+    // error handling
     T_TRY,              // try
     T_ERROR,            // error
     T_OCCURS,           // occurs
     T_AN_ERROR,         // special for "an error"
     
-    // HTTP and JSON
+    // http and json
     T_HTTP,             // http
     T_SEND,             // send
     T_REQUEST,          // request
@@ -195,7 +195,7 @@ enum TokenType {
     T_STRINGIFY,        // stringify
     T_JSON,             // json
     
-    // Concurrency
+    // concurrency
     T_BACKGROUND,       // background
     T_TASK,             // task
     T_CHANNEL,          // channel
@@ -204,7 +204,7 @@ enum TokenType {
     T_FINISH,           // finish
     T_AWAIT,            // await
     
-    // GUI keywords
+    // gui keywords
     T_OPEN,             // open
     T_CLOSE,            // close
     T_GUI,              // gui
@@ -224,7 +224,7 @@ enum TokenType {
     T_CLICKED,          // clicked
     T_CODE,             // code
     
-    // Colors
+    // colors
     T_RED,              // red
     T_GREEN,            // green
     T_BLUE,             // blue
@@ -236,12 +236,12 @@ enum TokenType {
     T_PINK,             // pink
     T_GRAY,             // gray
     
-    // Modules
+    // modules
     T_LOAD,             // load
     T_NATIVE,           // native
     T_IMPORT,           // import
     
-    // Miscellaneous
+    // miscellaneous
     T_ENVIRONMENT,      // environment
     T_VARIABLE,         // variable
     T_RUN,              // run
@@ -254,13 +254,13 @@ enum TokenType {
     T_BOOLEAN,          // boolean
     T_THERE,            // there
     
-    // Comments
+    // comments
     T_IGNORE,           // ignore
     T_THIS,             // this
     T_LINE,             // line
     T_ALL,              // all
     
-    // Punctuation (minimal, for parsing)
+    // punctuation (minimal, for parsing)
     T_COLON,            // :
     T_COMMA,            // ,
     T_DOT,              // .
@@ -270,7 +270,7 @@ enum TokenType {
     T_RBRACKET,         // ]
 };
 
-// Token structure with line information for error reporting
+// token structure with line information for error reporting
 struct Token {
     TokenType type;
     std::string value;

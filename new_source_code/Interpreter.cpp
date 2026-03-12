@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Interpreter.cpp - High-performance runtime execution engine
+// nexo v1.0 beta - natural english programming language
+// interpreter.cpp - high-performance runtime execution engine
 #include "Interpreter.h"
 #include "Lexer.h"
 #include "Parser.h"
@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <random>
 
-// Fast node cast - uses static_cast since we verify via nodeType
+// fast node cast - uses static_cast since we verify via nodeType
 template<typename T>
 static inline T* as(const std::shared_ptr<ASTNode>& node) {
     return static_cast<T*>(node.get());
@@ -93,7 +93,7 @@ std::string Interpreter::httpPost(const std::string& url, const std::string& bod
     return result;
 }
 
-// Robust JSON parser
+// robust json parser
 std::shared_ptr<Value> Interpreter::parseJson(const std::string& json) {
     size_t pos = 0;
     return parseJsonValue(json, pos);
@@ -107,7 +107,7 @@ std::shared_ptr<Value> Interpreter::parseJsonValue(const std::string& json, size
     
     char c = json[pos];
     
-    // Object
+    // object
     if (c == '{') {
         pos++;
         auto result = std::make_shared<Value>();
@@ -131,7 +131,7 @@ std::shared_ptr<Value> Interpreter::parseJsonValue(const std::string& json, size
         return result;
     }
     
-    // Array
+    // array
     if (c == '[') {
         pos++;
         auto result = std::make_shared<Value>();
@@ -150,17 +150,17 @@ std::shared_ptr<Value> Interpreter::parseJsonValue(const std::string& json, size
         return result;
     }
     
-    // String
+    // string
     if (c == '"') {
         return std::make_shared<Value>(parseJsonString(json, pos));
     }
     
-    // Boolean / null
+    // boolean / null
     if (json.compare(pos, 4, "true") == 0) { pos += 4; return std::make_shared<Value>(true); }
     if (json.compare(pos, 5, "false") == 0) { pos += 5; return std::make_shared<Value>(false); }
     if (json.compare(pos, 4, "null") == 0) { pos += 4; return std::make_shared<Value>(); }
     
-    // Number
+    // number
     size_t start = pos;
     if (pos < json.length() && (json[pos] == '-' || json[pos] == '+')) pos++;
     while (pos < json.length() && (std::isdigit(json[pos]) || json[pos] == '.' || json[pos] == 'e' || json[pos] == 'E' || json[pos] == '+' || json[pos] == '-')) pos++;
@@ -230,9 +230,7 @@ std::string Interpreter::stringifyValue(std::shared_ptr<Value> val) {
     return "null";
 }
 
-// ============================================================================
-// HIGH-PERFORMANCE EXPRESSION EVALUATION (switch-based dispatch)
-// ============================================================================
+// high-performance expression evaluation (switch-based dispatch)
 std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
     checkTaskStatus();
     
@@ -240,7 +238,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
     
     switch (node->nodeType) {
     
-    // --- Literals ---
+    // literals
     case NodeType::Number:
         return std::make_shared<Value>(as<NumberNode>(node)->value);
     
@@ -256,7 +254,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
     case NodeType::Identifier:
         return env->get(as<IdentifierNode>(node)->name);
     
-    // --- Array literal ---
+    // array literal
     case NodeType::Array: {
         auto n = as<ArrayNode>(node);
         auto arr = std::make_shared<Value>();
@@ -268,7 +266,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return arr;
     }
     
-    // --- Binary operations ---
+    // binary operations
     case NodeType::BinaryOp: {
         auto n = as<BinaryOpNode>(node);
         auto left = eval(n->left);
@@ -298,7 +296,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>();
     }
     
-    // --- Unary operations ---
+    // unary operations
     case NodeType::UnaryOp: {
         auto n = as<UnaryOpNode>(node);
         auto operand = eval(n->operand);
@@ -307,7 +305,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>();
     }
     
-    // --- Field access ---
+    // field access
     case NodeType::GetField: {
         auto n = as<GetFieldNode>(node);
         auto obj = eval(n->object);
@@ -319,7 +317,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>();
     }
     
-    // --- Array operations ---
+    // array operations
     case NodeType::GetFirst: {
         auto arr = env->get(as<GetFirstNode>(node)->arrayName);
         if (arr->array.empty()) throw std::runtime_error("Cannot get first item of empty list");
@@ -356,7 +354,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(-1.0);
     }
     
-    // --- Math operations ---
+    // math operations
     case NodeType::MathOp: {
         auto n = as<MathOpNode>(node);
         double a = eval(n->arg1)->number;
@@ -377,7 +375,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(a);
     }
     
-    // --- Random ---
+    // random
     case NodeType::Random: {
         auto n = as<RandomNode>(node);
         int minVal = static_cast<int>(eval(n->min)->number);
@@ -386,7 +384,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(static_cast<double>(minVal + rand() % (maxVal - minVal + 1)));
     }
     
-    // --- Time ---
+    // time
     case NodeType::CurrentTime:
         return std::make_shared<Value>(static_cast<double>(time(nullptr)));
     
@@ -403,7 +401,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(0.0);
     }
     
-    // --- Aggregate functions ---
+    // aggregate functions
     case NodeType::Max: {
         auto arr = env->get(as<MaxNode>(node)->arrayName);
         if (arr->array.empty()) throw std::runtime_error("Cannot get maximum of empty list");
@@ -432,7 +430,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(sum / arr->array.size());
     }
     
-    // --- Keys/Values ---
+    // keys/values
     case NodeType::Keys: {
         auto obj = env->get(as<KeysNode>(node)->mapName);
         auto result = std::make_shared<Value>();
@@ -452,7 +450,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return result;
     }
     
-    // --- String operations ---
+    // string operations
     case NodeType::Uppercase:
         return std::make_shared<Value>(toUpper(eval(as<UppercaseNode>(node)->text)->text));
     case NodeType::Lowercase:
@@ -526,7 +524,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(text.length() >= suffix.length() && text.compare(text.length() - suffix.length(), suffix.length(), suffix) == 0);
     }
     
-    // --- File operations ---
+    // file operations
     case NodeType::ReadFile: {
         auto n = as<ReadFileNode>(node);
         std::string path = eval(n->filepath)->text;
@@ -553,7 +551,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(file.good());
     }
     
-    // --- HTTP ---
+    // http
     case NodeType::HttpGet:
         return std::make_shared<Value>(httpGet(eval(as<HttpGetNode>(node)->url)->text));
     
@@ -564,21 +562,21 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return std::make_shared<Value>(httpPost(url, body));
     }
     
-    // --- JSON ---
+    // json
     case NodeType::Parse:
         return parseJson(eval(as<ParseNode>(node)->json)->text);
     
     case NodeType::Stringify:
         return std::make_shared<Value>(stringifyValue(eval(as<StringifyNode>(node)->object)));
     
-    // --- Environment variable ---
+    // environment variable
     case NodeType::GetEnvVar: {
         std::string varName = eval(as<GetEnvVarNode>(node)->varName)->text;
         const char* val = std::getenv(varName.c_str());
         return std::make_shared<Value>(val ? std::string(val) : std::string(""));
     }
     
-    // --- Function call ---
+    // function call
     case NodeType::Call: {
         auto n = as<CallNode>(node);
         auto func = env->get(n->name);
@@ -610,7 +608,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return result;
     }
     
-    // --- Lambda ---
+    // lambda
     case NodeType::Lambda: {
         auto n = as<LambdaNode>(node);
         auto funcVal = std::make_shared<Value>();
@@ -622,7 +620,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return funcVal;
     }
     
-    // --- Call function value ---
+    // call function value
     case NodeType::CallFunc: {
         auto n = as<CallFuncNode>(node);
         auto func = eval(n->func);
@@ -650,7 +648,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
         return result;
     }
     
-    // --- Await ---
+    // await
     case NodeType::Await: {
         auto n = as<AwaitNode>(node);
         auto task = eval(n->task);
@@ -665,9 +663,7 @@ std::shared_ptr<Value> Interpreter::eval(std::shared_ptr<ASTNode> node) {
     }
 }
 
-// ============================================================================
-// HIGH-PERFORMANCE STATEMENT EXECUTION (switch-based dispatch)
-// ============================================================================
+// high-performance statement execution (switch-based dispatch)
 void Interpreter::execute(std::shared_ptr<ASTNode> node) {
     checkTaskStatus();
     
@@ -675,7 +671,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
     
     switch (node->nodeType) {
     
-    // --- Display ---
+    // display
     case NodeType::Display: {
         auto val = eval(as<DisplayNode>(node)->value);
         std::lock_guard<std::mutex> lock(output_mutex);
@@ -683,14 +679,14 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Set variable ---
+    // set variable
     case NodeType::Set: {
         auto n = as<SetNode>(node);
         env->set(n->name, eval(n->value));
         return;
     }
     
-    // --- Set field ---
+    // set field
     case NodeType::SetField: {
         auto n = as<SetFieldNode>(node);
         auto obj = eval(n->object);
@@ -700,7 +696,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- User input ---
+    // user input
     case NodeType::UserInput: {
         auto n = as<UserInputNode>(node);
         {
@@ -721,7 +717,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- If statement ---
+    // if statement
     case NodeType::If: {
         auto n = as<IfNode>(node);
         if (eval(n->condition)->isTruthy()) {
@@ -732,7 +728,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- While loop ---
+    // while loop
     case NodeType::While: {
         auto n = as<WhileNode>(node);
         while (eval(n->condition)->isTruthy()) {
@@ -744,7 +740,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Repeat loop ---
+    // repeat loop
     case NodeType::Repeat: {
         auto n = as<RepeatNode>(node);
         int count = static_cast<int>(eval(n->count)->number);
@@ -757,7 +753,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Iterate loop ---
+    // iterate loop
     case NodeType::Iterate: {
         auto n = as<IterateNode>(node);
         int start = static_cast<int>(eval(n->start)->number);
@@ -772,7 +768,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- For each loop ---
+    // for each loop
     case NodeType::ForEach: {
         auto n = as<ForEachNode>(node);
         auto collection = eval(n->collection);
@@ -798,7 +794,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Function definition ---
+    // function definition
     case NodeType::FunctionDef: {
         auto n = as<FunctionDefNode>(node);
         auto funcVal = std::make_shared<Value>();
@@ -811,18 +807,18 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Return ---
+    // return
     case NodeType::Return: {
         auto n = as<ReturnNode>(node);
         throw ReturnException(n->value ? eval(n->value) : std::make_shared<Value>());
     }
     
-    // --- Break, Continue, Exit ---
+    // break, continue, exit
     case NodeType::Break: throw BreakException();
     case NodeType::Continue: throw ContinueException();
     case NodeType::Exit: exit(0);
     
-    // --- Array operations ---
+    // array operations
     case NodeType::AddToArray: {
         auto n = as<AddToArrayNode>(node);
         auto arr = env->get(n->arrayName);
@@ -871,7 +867,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- File operations ---
+    // file operations
     case NodeType::WriteFile: {
         auto n = as<WriteFileNode>(node);
         std::string path = eval(n->filepath)->text;
@@ -896,14 +892,14 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Wait ---
+    // wait
     case NodeType::Wait: {
         double secs = eval(as<WaitNode>(node)->seconds)->number;
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(secs * 1000)));
         return;
     }
     
-    // --- Try-catch ---
+    // try-catch
     case NodeType::TryCatch: {
         auto n = as<TryCatchNode>(node);
         try {
@@ -921,7 +917,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Channels ---
+    // channels
     case NodeType::CreateChannel: {
         std::string name = as<CreateChannelNode>(node)->channelName;
         std::lock_guard<std::mutex> lock(channel_registry_mutex);
@@ -954,7 +950,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Background task ---
+    // background task
     case NodeType::Spawn: {
         auto n = as<SpawnNode>(node);
         auto threadEnv = std::make_shared<Environment>(*env);
@@ -983,7 +979,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Object creation ---
+    // object creation
     case NodeType::CreateObject: {
         auto n = as<CreateObjectNode>(node);
         auto obj = std::make_shared<Value>();
@@ -995,7 +991,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Import ---
+    // import
     case NodeType::Import: {
         auto n = as<ImportNode>(node);
         std::string path = eval(n->filepath)->text;
@@ -1007,7 +1003,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Run command ---
+    // run command
     case NodeType::RunCommand: {
         auto n = as<RunCommandNode>(node);
         std::string cmd = eval(n->command)->text;
@@ -1031,7 +1027,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- Trace ---
+    // trace
     case NodeType::Trace: {
         std::lock_guard<std::mutex> lock(output_mutex);
         std::cout << "[Trace] Call stack:" << std::endl;
@@ -1041,7 +1037,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- GUI Window ---
+    // gui window
     case NodeType::GUIWindow: {
         auto n = as<GUIWindowNode>(node);
         std::string title = eval(n->title)->toString();
@@ -1067,7 +1063,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     }
     
-    // --- GUI Draw calls (simulation fallback) ---
+    // gui draw calls (simulation fallback)
     case NodeType::GUIDrawText: {
         auto n = as<GUIDrawTextNode>(node);
         std::string text = eval(n->text)->toString();

@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Parser.cpp - Parser implementation (Complete with all features)
+// nexo v1.0 beta - natural english programming language
+// parser.cpp - parser implementation (complete with all features)
 #include "Parser.h"
 #include <stdexcept>
 #include <algorithm>
@@ -58,7 +58,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parse() {
     return program;
 }
 
-// Expression parsing with precedence
+// expression parsing with precedence
 std::shared_ptr<ASTNode> Parser::expression() { return orExpr(); }
 
 std::shared_ptr<ASTNode> Parser::orExpr() {
@@ -206,7 +206,7 @@ std::shared_ptr<ASTNode> Parser::unaryExpr() {
 std::shared_ptr<ASTNode> Parser::postfixExpr() {
     auto left = primary();
     
-    // Dot notation: user.name
+    // dot notation: user.name
     while (match(T_DOT)) {
         if (!check(T_IDENTIFIER)) {
             throw std::runtime_error("Line " + std::to_string(currentLine()) + 
@@ -219,7 +219,7 @@ std::shared_ptr<ASTNode> Parser::postfixExpr() {
         left = node;
     }
     
-    // Postfix "exists" for files
+    // postfix "exists" for files
     if (match(T_EXISTS)) {
         auto node = std::make_shared<FileExistsNode>();
         node->filepath = left;
@@ -229,23 +229,23 @@ std::shared_ptr<ASTNode> Parser::postfixExpr() {
     return left;
 }
 
-// Primary expressions: literals, identifiers, built-in functions
+// primary expressions: literals, identifiers, built-in functions
 std::shared_ptr<ASTNode> Parser::primary() {
-    // Numbers
+    // numbers
     if (check(T_NUMBER)) {
         auto node = std::make_shared<NumberNode>();
         node->value = std::stod(advance().value);
         return node;
     }
     
-    // Strings
+    // strings
     if (check(T_STRING)) {
         auto node = std::make_shared<TextNode>();
         node->value = advance().value;
         return node;
     }
     
-    // Booleans
+    // booleans
     if (match(T_TRUE)) {
         auto node = std::make_shared<BoolNode>();
         node->value = true;
@@ -257,7 +257,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "length of X"
+    // "length of x"
     if (match(T_LENGTH)) {
         match(T_OF);
         auto node = std::make_shared<LengthOfNode>();
@@ -265,7 +265,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "the first/last/Nth item in X"
+    // "the first/last/nth item in x"
     if (match(T_THE)) {
         if (match(T_FIRST)) {
             match(T_ITEM); match(T_IN);
@@ -281,28 +281,28 @@ std::shared_ptr<ASTNode> Parser::primary() {
             node->arrayName = arr;
             return node;
         }
-        // "the keys of X"
+        // "the keys of x"
         if (match(T_KEYS)) {
             match(T_OF);
             auto n = std::make_shared<KeysNode>();
             n->mapName = advance().value;
             return n;
         }
-        // "the values of X"
+        // "the values of x"
         if (match(T_VALUES)) {
             match(T_OF);
             auto n = std::make_shared<ValuesNode>();
             n->mapName = advance().value;
             return n;
         }
-        // "the environment variable X"
+        // "the environment variable x"
         if (match(T_ENVIRONMENT)) {
             match(T_VARIABLE);
             auto n = std::make_shared<GetEnvVarNode>();
             n->varName = expression();
             return n;
         }
-        // "the X of Y" - field access
+        // "the x of y" - field access
         if (check(T_IDENTIFIER)) {
             std::string field = advance().value;
             if (match(T_OF)) {
@@ -319,7 +319,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         }
     }
     
-    // "first item in X"
+    // "first item in x"
     if (match(T_FIRST)) {
         match(T_ITEM); match(T_IN);
         std::string arr = advance().value;
@@ -328,7 +328,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "last item in X"
+    // "last item in x"
     if (match(T_LAST)) {
         match(T_ITEM); match(T_IN);
         std::string arr = advance().value;
@@ -337,7 +337,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "item N of X"
+    // "item n of x"
     if (match(T_ITEM)) {
         auto idx = expression();
         match(T_OF);
@@ -348,7 +348,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "read the file X" / "read file X as lines"
+    // "read the file x" / "read file x as lines"
     if (match(T_READ)) {
         match(T_THE); match(T_FILE);
         auto filepath = expression();
@@ -361,7 +361,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "a random number from X to Y"
+    // "a random number from x to y"
     if (match(T_A) || match(T_AN)) {
         if (match(T_RANDOM)) {
             match(T_NUMBER_TYPE); match(T_FROM);
@@ -391,7 +391,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         }
     }
     
-    // Math functions
+    // math functions
     if (match(T_FLOOR)) {
         match(T_OF);
         auto node = std::make_shared<MathOpNode>();
@@ -445,7 +445,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         if (match(T_MINUTE)) { auto n = std::make_shared<DateNode>(); n->part = "minute"; return n; }
     }
     
-    // Array/list aggregate functions
+    // array/list aggregate functions
     if (match(T_MAXIMUM)) { match(T_OF); auto n = std::make_shared<MaxNode>(); n->arrayName = advance().value; return n; }
     if (match(T_MINIMUM)) { match(T_OF); auto n = std::make_shared<MinNode>(); n->arrayName = advance().value; return n; }
     if (match(T_SUM)) { match(T_OF); auto n = std::make_shared<SumNode>(); n->arrayName = advance().value; return n; }
@@ -453,12 +453,12 @@ std::shared_ptr<ASTNode> Parser::primary() {
     if (match(T_KEYS)) { match(T_OF); auto n = std::make_shared<KeysNode>(); n->mapName = advance().value; return n; }
     if (match(T_VALUES)) { match(T_OF); auto n = std::make_shared<ValuesNode>(); n->mapName = advance().value; return n; }
     
-    // String operations
+    // string operations
     if (match(T_UPPERCASE)) { auto n = std::make_shared<UppercaseNode>(); n->text = expression(); return n; }
     if (match(T_LOWERCASE)) { auto n = std::make_shared<LowercaseNode>(); n->text = expression(); return n; }
     if (match(T_TRIM)) { auto n = std::make_shared<TrimNode>(); n->text = expression(); return n; }
     
-    // "split X by Y"
+    // "split x by y"
     if (match(T_SPLIT)) {
         auto text = expression();
         match(T_BY);
@@ -468,7 +468,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "join X by Y"
+    // "join x by y"
     if (match(T_JOIN)) {
         std::string arr = advance().value;
         match(T_BY);
@@ -478,7 +478,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "substring of X from Y to/with length Z"
+    // "substring of x from y to/with length z"
     if (match(T_SUBSTRING)) {
         match(T_OF);
         auto text = expression();
@@ -499,7 +499,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // HTTP GET as expression: "http get X"
+    // http get as expression: "http get x"
     if (match(T_HTTP)) {
         match(T_GET);
         auto url = expression();
@@ -508,7 +508,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "parse X as json"
+    // "parse x as json"
     if (match(T_PARSE)) {
         auto json = expression();
         match(T_AS); match(T_JSON);
@@ -517,7 +517,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // "stringify X"
+    // "stringify x"
     if (match(T_STRINGIFY)) {
         auto obj = expression();
         auto node = std::make_shared<StringifyNode>();
@@ -525,14 +525,14 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // Parentheses
+    // parentheses
     if (match(T_LPAREN)) {
         auto expr = expression();
         expect(T_RPAREN, "Expected ')'");
         return expr;
     }
     
-    // Array literal [a, b, c]
+    // array literal [a, b, c]
     if (match(T_LBRACKET)) {
         auto node = std::make_shared<ArrayNode>();
         if (!check(T_RBRACKET)) {
@@ -545,7 +545,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         return node;
     }
     
-    // Identifier
+    // identifier
     if (check(T_IDENTIFIER)) {
         auto node = std::make_shared<IdentifierNode>();
         node->name = advance().value;
@@ -556,7 +556,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
         ": Unexpected token '" + peek().value + "'");
 }
 
-// Statement parsing
+// statement parsing
 std::shared_ptr<ASTNode> Parser::statement() {
     // "display ..." or "display the message ..."
     if (match(T_DISPLAY)) {
@@ -566,11 +566,11 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "set the X to Y"
+    // "set the x to y"
     if (match(T_SET)) {
         match(T_THE);
         
-        // Check for "set the X of Y to Z" (field assignment)
+        // check for "set the x of y to z" (field assignment)
         if (check(T_IDENTIFIER) && peekNext().type == T_OF) {
             std::string field = advance().value;
             match(T_OF);
@@ -593,7 +593,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "ask the user ... and store it in X"
+    // "ask the user ... and store it in x"
     if (match(T_ASK)) {
         match(T_THE); match(T_USER);
         auto prompt = expression();
@@ -653,7 +653,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "repeat N times:"
+    // "repeat n times:"
     if (match(T_REPEAT)) {
         auto count = expression();
         match(T_TIMES); match(T_COLON);
@@ -666,7 +666,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "iterate from X through Y using var:"
+    // "iterate from x through y using var:"
     if (match(T_ITERATE)) {
         match(T_FROM);
         auto start = expression();
@@ -686,7 +686,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "for each X in Y do the following:"
+    // "for each x in y do the following:"
     if (match(T_FOR)) {
         match(T_EACH);
         std::string var = advance().value;
@@ -703,7 +703,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "define function called X with parameters:"
+    // "define function called x with parameters:"
     if (match(T_DEFINE)) {
         match(T_FUNCTION); match(T_CALLED);
         std::string name = advance().value;
@@ -728,7 +728,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "call the function X with Y"
+    // "call the function x with y"
     if (match(T_CALL)) {
         match(T_THE); match(T_FUNCTION);
         std::string name = advance().value;
@@ -756,7 +756,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "add X to Y"
+    // "add x to y"
     if (match(T_ADD)) {
         auto val = expression();
         match(T_TO);
@@ -767,9 +767,9 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "remove X from Y"
+    // "remove x from y"
     if (match(T_REMOVE)) {
-        // "remove duplicates from X"
+        // "remove duplicates from x"
         if (match(T_IDENTIFIER) && tokens[pos-1].value == "duplicates") {
             match(T_FROM);
             std::string arr = advance().value;
@@ -786,7 +786,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "sort the list X"
+    // "sort the list x"
     if (match(T_SORT)) {
         match(T_THE); match(T_LIST);
         std::string arr = advance().value;
@@ -795,7 +795,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "reverse the list X"
+    // "reverse the list x"
     if (match(T_REVERSE)) {
         match(T_THE); match(T_LIST);
         std::string arr = advance().value;
@@ -804,7 +804,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "unique the list X" / "make X unique"
+    // "unique the list x" / "make x unique"
     if (match(T_UNIQUE)) {
         match(T_THE); match(T_LIST);
         std::string arr = advance().value;
@@ -813,7 +813,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "replace X with Y in Z"
+    // "replace x with y in z"
     if (match(T_REPLACE)) {
         auto oldStr = expression();
         match(T_WITH);
@@ -829,7 +829,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "write X into the file Y"
+    // "write x into the file y"
     if (match(T_WRITE)) {
         auto content = expression();
         match(T_INTO); match(T_THE); match(T_FILE);
@@ -840,7 +840,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "append X to the file Y"
+    // "append x to the file y"
     if (match(T_APPEND)) {
         auto content = expression();
         match(T_TO); match(T_THE); match(T_FILE);
@@ -851,7 +851,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "delete the file X"
+    // "delete the file x"
     if (match(T_DELETE)) {
         match(T_THE); match(T_FILE);
         auto filepath = expression();
@@ -860,7 +860,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "wait X seconds"
+    // "wait x seconds"
     if (match(T_WAIT)) {
         auto secs = expression();
         match(T_SECONDS);
@@ -885,7 +885,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "create channel called X" / "create an object called X"
+    // "create channel called x" / "create an object called x"
     if (match(T_CREATE)) {
         if (match(T_CHANNEL)) {
             match(T_CALLED);
@@ -914,7 +914,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         }
     }
     
-    // "in the background as X do the following:"
+    // "in the background as x do the following:"
     if (match(T_IN)) {
         match(T_THE); match(T_BACKGROUND); match(T_AS);
         std::string taskName = advance().value;
@@ -928,7 +928,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "send X to channel Y"
+    // "send x to channel y"
     if (match(T_SEND)) {
         // Check if it's "send http ..."
         if (check(T_HTTP)) {
@@ -962,7 +962,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "receive from channel X and store it in Y"
+    // "receive from channel x and store it in y"
     if (match(T_RECEIVE)) {
         match(T_FROM); match(T_CHANNEL);
         std::string ch = advance().value;
@@ -974,7 +974,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "import X"
+    // "import x"
     if (match(T_IMPORT)) {
         auto filepath = expression();
         auto node = std::make_shared<ImportNode>();
@@ -982,7 +982,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "run the command X" / "run command X and capture output in Y"
+    // "run the command x" / "run command x and capture output in y"
     if (match(T_RUN)) {
         match(T_THE);
         // Skip "command" if it appears as an identifier
@@ -1004,7 +1004,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return node;
     }
     
-    // "load native X as Y"
+    // "load native x as y"
     if (match(T_LOAD)) {
         match(T_NATIVE);
         auto lib = expression();
@@ -1112,7 +1112,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
     if (match(T_CONTINUE)) return std::make_shared<ContinueNode>();
     if (match(T_EXIT)) return std::make_shared<ExitNode>();
     
-    // "stop task X"
+    // "stop task x"
     if (match(T_STOP)) {
         match(T_TASK);
         std::string name = advance().value;
@@ -1130,6 +1130,6 @@ std::shared_ptr<ASTNode> Parser::statement() {
         return std::make_shared<GUICloseNode>();
     }
     
-    // Default: try to parse as expression
+    // default: try to parse as expression
     return expression();
 }

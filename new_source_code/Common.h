@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Common.h - Forward declarations, includes, and global state
+// nexo v1.0 beta - natural english programming language
+// common.h - forward declarations, includes, and global state
 #pragma once
 
 #include <iostream>
@@ -28,19 +28,19 @@
 #include <cstdio>
 #include <numeric>
 
-// Forward declarations
+// forward declarations
 struct ASTNode;
 struct Value;
 struct FunctionValue;
 class Environment;
 class Interpreter;
 
-// Global thread-safe state
+// global thread-safe state
 extern std::mutex output_mutex;
 extern std::mutex task_registry_mutex;
 extern std::unordered_map<std::string, bool> task_registry;
 
-// Mailbox for channel communication
+// mailbox for channel communication
 struct Mailbox {
     std::queue<std::shared_ptr<Value>> messages;
     std::mutex lock;
@@ -54,7 +54,7 @@ struct Mailbox {
 extern std::unordered_map<std::string, std::shared_ptr<Mailbox>> channel_registry;
 extern std::mutex channel_registry_mutex;
 
-// Utility functions
+// utility functions
 std::string trim(const std::string& s);
 std::vector<std::string> split(const std::string& s, const std::string& delim);
 std::string join(const std::vector<std::string>& v, const std::string& delim);

@@ -1,7 +1,7 @@
-// Nexo v5.0 - Natural English Programming Language
-// main.cpp - Entry point
-// Compile: g++ -std=c++17 -O3 *.cpp -o nexo.exe -static -pthread
-// Usage: .\nexo.exe .\program.nx
+// nexo v1.0 beta - natural english programming language
+// main.cpp - entry point
+// compile: g++ -std=c++17 -o3 *.cpp -o nexo.exe -static -pthread
+// usage: .\nexo.exe .\program.nx
 
 #include "Common.h"
 #include "Lexer.h"
@@ -12,9 +12,9 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
-    // Usage: nexo.exe file.nx
+    // usage: nexo.exe file.nx
     if (argc != 2) {
-        std::cerr << "Nexo v5.0 - Natural English Programming Language" << std::endl;
+        std::cerr << "nexo v1.0 beta - natural english programming language" << std::endl;
         std::cerr << "Usage: " << argv[0] << " <program.nx>" << std::endl;
         std::cerr << std::endl;
         std::cerr << "Example:" << std::endl;
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    // Read the source file
+    // read the source file
     std::string filepath = argv[1];
     std::ifstream file(filepath);
     if (!file) {
@@ -35,15 +35,15 @@ int main(int argc, char** argv) {
     std::string code = buffer.str();
     
     try {
-        // Lexical analysis
+        // lexical analysis
         Lexer lexer(code);
         auto tokens = lexer.tokenize();
         
-        // Parsing
+        // parsing
         Parser parser(tokens);
         auto program = parser.parse();
         
-        // Execution
+        // execution
         Interpreter interpreter;
         interpreter.run(program);
         

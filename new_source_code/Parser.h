@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Parser.h - Parser declaration
+// nexo v1.0 beta - natural english programming language
+// parser.h - parser declaration
 #pragma once
 
 #include "Token.h"

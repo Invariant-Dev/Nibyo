@@ -1,12 +1,12 @@
-// Nexo v5.0 - Natural English Programming Language
-// Value.h - Core value types and environment (optimized)
+// nexo v1.0 beta - natural english programming language
+// value.h - core value types and environment (optimized)
 #pragma once
 
 #include "Common.h"
 #include <unordered_map>
 #include <unordered_set>
 
-// String interning pool for memory efficiency
+// string interning pool for memory efficiency
 class StringPool {
     std::unordered_set<std::string> pool;
     std::mutex pool_mutex;
@@ -22,10 +22,10 @@ public:
     }
 };
 
-// Forward declaration
+// forward declaration
 struct FunctionValue;
 
-// Core value type - represents any Nexo value
+// core value type - represents any nexo value
 struct Value {
     enum Type { 
         NONE, 
@@ -48,13 +48,13 @@ struct Value {
     std::shared_future<std::shared_ptr<Value>> futureVal;
     std::shared_ptr<Mailbox> channel;
     
-    // Constructors
+    // constructors
     Value() = default;
     explicit Value(double n) : type(NUMBER), number(n) {}
     explicit Value(const std::string& s) : type(TEXT), text(StringPool::instance().intern(s)) {}
     explicit Value(bool b) : type(BOOLEAN), boolean(b) {}
     
-    // Convert value to string representation
+    // convert value to string representation
     std::string toString() const {
         switch (type) {
             case NUMBER: {
@@ -99,7 +99,7 @@ struct Value {
         }
     }
     
-    // Check if value is truthy
+    // check if value is truthy
     bool isTruthy() const {
         switch (type) {
             case BOOLEAN: return boolean;
@@ -113,7 +113,7 @@ struct Value {
     }
 };
 
-// Function value with closure support
+// function value with closure support
 struct FunctionValue {
     std::vector<std::string> params;
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -121,7 +121,7 @@ struct FunctionValue {
     std::function<std::shared_ptr<Value>(const std::vector<std::shared_ptr<Value>>&)> nativeImpl;
 };
 
-// Environment for variable scoping (optimized with unordered_map)
+// environment for variable scoping (optimized with unordered_map)
 class Environment {
     std::mutex env_mutex;
     
@@ -131,14 +131,14 @@ public:
     
     explicit Environment(std::shared_ptr<Environment> p = nullptr) : parent(p) {}
     
-    // Copy constructor for thread spawning
+    // copy constructor for thread spawning
     Environment(const Environment& other) : vars(other.vars), parent(other.parent) {}
     
-    // Set a variable (updates parent if exists there)
+    // set a variable (updates parent if exists there)
     void set(const std::string& name, std::shared_ptr<Value> val) {
         std::lock_guard<std::mutex> lock(env_mutex);
         
-        // Check if variable exists in parent scope
+        // check if variable exists in parent scope
         if (parent) {
             std::shared_ptr<Environment> current = parent;
             while (current) {
@@ -154,13 +154,13 @@ public:
         vars[name] = val;
     }
     
-    // Define a new variable in current scope only
+    // define a new variable in current scope only
     void define(const std::string& name, std::shared_ptr<Value> val) {
         std::lock_guard<std::mutex> lock(env_mutex);
         vars[name] = val;
     }
     
-    // Get a variable (searches parent scopes)
+    // get a variable (searches parent scopes)
     std::shared_ptr<Value> get(const std::string& name) {
         std::lock_guard<std::mutex> lock(env_mutex);
         
@@ -179,7 +179,7 @@ public:
         );
     }
     
-    // Check if variable exists
+    // check if variable exists
     bool has(const std::string& name) {
         std::lock_guard<std::mutex> lock(env_mutex);
         

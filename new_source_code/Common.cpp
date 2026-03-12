@@ -1,16 +1,16 @@
-// Nexo v5.0 - Natural English Programming Language
-// Common.cpp - Global state implementations
+// nexo v1.0 beta - natural english programming language
+// common.cpp - global state implementations
 #include "Common.h"
 #include "Value.h"
 
-// Global state definitions
+// global state definitions
 std::mutex output_mutex;
 std::mutex task_registry_mutex;
 std::unordered_map<std::string, bool> task_registry;
 std::unordered_map<std::string, std::shared_ptr<Mailbox>> channel_registry;
 std::mutex channel_registry_mutex;
 
-// Mailbox implementations
+// mailbox implementations
 void Mailbox::send(std::shared_ptr<Value> msg) {
     {
         std::lock_guard<std::mutex> guard(lock);
@@ -47,7 +47,7 @@ std::shared_ptr<Value> Mailbox::receiveBlocking(double timeoutSeconds) {
     return msg;
 }
 
-// Utility function implementations
+// utility function implementations
 std::string trim(const std::string& s) {
     size_t start = s.find_first_not_of(" \t\r\n");
     if (start == std::string::npos) return "";

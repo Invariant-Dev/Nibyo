@@ -1,5 +1,5 @@
-// Nexo v5.0 - Natural English Programming Language
-// Lexer.h - Lexer declaration
+// nexo v1.0 beta - natural english programming language
+// lexer.h - lexer declaration
 #pragma once
 
 #include "Token.h"
