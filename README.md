@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
   <img src="https://via.placeholder.com/150/000000/FFFFFF?text=Nexo+v1.0+beta" alt="Nexo Logo" width="150" height="150"/>
   
@@ -264,3 +265,7 @@ Nexo is a community-driven side-project! If you want to contribute to the v1.0 b
   <b>Built with ❤️ as a passion project.</b><br>
   <i>"Programming has never been this natural."</i>
 </div>
+=======
+# Nexo
+Project Nexo is a lightweight programming language written in C++, designed to be easier and more intuitive than pseudocode. It lets beginners express algorithms and logic clearly with human-readable syntax, while its C-based interpreter ensures fast and portable execution. Ideal for learning programming concepts without syntax complexity.
+>>>>>>> 900776f1f14d7cefba6ce302767c35388e5ee7a4
