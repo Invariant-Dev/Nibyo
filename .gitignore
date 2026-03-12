@@ -1,0 +1,14 @@
+# Binaries
+*.exe
+*.o
+*.out
+nexo
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+.DS_Store
+Thumbs.db

@@ -1,0 +1,43 @@
+{
+  "name": "nexo-lang",
+  "displayName": "Nexo Language Support",
+  "version": "1.0.0",
+  "publisher": "yourname",
+  "description": "Language support for Nexo: The language easier than pseudocode.",
+  "main": "./extension.js",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": ["Programming Languages"],
+  "activationEvents": ["onLanguage:nexo"],
+  "contributes": {
+    "commands": [{
+      "command": "nexo.runFile",
+      "title": "Run Nexo File",
+      "category": "Nexo"
+    }],
+    "menus": {
+      "editor/title": [{
+        "command": "nexo.runFile",
+        "group": "navigation",
+        "when": "editorLangId == nexo"
+      }],
+      "editor/context": [{
+        "command": "nexo.runFile",
+        "group": "navigation",
+        "when": "editorLangId == nexo"
+      }]
+    },
+    "languages": [{
+      "id": "nexo",
+      "aliases": ["Nexo", "nexo"],
+      "extensions": [".nx", ".nexo"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "nexo",
+      "scopeName": "source.nexo",
+      "path": "./syntaxes/nexo.tmLanguage.json"
+    }]
+  }
+}

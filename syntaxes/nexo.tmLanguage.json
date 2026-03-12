@@ -1,0 +1,31 @@
+{
+  "scopeName": "source.nexo",
+  "patterns": [
+    {
+      "name": "comment.line.number-sign.nexo",
+      "match": "#.*$"
+    },
+    {
+      "name": "comment.block.nexo",
+      "begin": "ignore all this:",
+      "end": "end ignore"
+    },
+    {
+      "name": "keyword.control.nexo",
+      "match": "\\b(if|else|do|end|iterate|using|through|to|repeat|times|while|in the background as|wait|seconds?|return)\\b"
+    },
+    {
+      "name": "keyword.other.nexo",
+      "match": "\\b(set|to|display|get|value|at|index|from|random)\\b"
+    },
+    {
+      "name": "string.quoted.double.nexo",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "constant.numeric.nexo",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    }
+  ]
+}
