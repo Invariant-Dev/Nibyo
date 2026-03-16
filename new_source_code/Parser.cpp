@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // parser.cpp - parser implementation (complete with all features)
 #include "Parser.h"
 #include <stdexcept>
@@ -312,7 +312,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
                 node->field = field;
                 return node;
             }
-            // Just identifier
+            // just identifier
             auto node = std::make_shared<IdentifierNode>();
             node->name = field;
             return node;
@@ -489,7 +489,7 @@ std::shared_ptr<ASTNode> Parser::primary() {
             match(T_LENGTH);
             len = expression();
         } else if (match(T_TO)) {
-            // "to" means end index, convert to length at runtime? Keep as length node
+            // "to" means end index, convert to length at runtime. keep as length node
             len = expression();
         }
         auto node = std::make_shared<SubstringNode>();
@@ -627,7 +627,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
         if (match(T_END)) {
             if (match(T_IF)) { /* done */ }
             else if (match(T_OTHERWISE) || check(T_ELSE)) {
-                // There's an else block
+                // there's an else block
             }
         }
         if (match(T_OTHERWISE) || match(T_ELSE)) {
@@ -824,8 +824,8 @@ std::shared_ptr<ASTNode> Parser::statement() {
         node->text = text;
         node->oldStr = oldStr;
         node->newStr = newStr;
-        // Since replace is an expression that returns a value, we wrap it as a set
-        // Actually, let's just return the expression node - the default handler will eval it
+        // since replace is an expression that returns a value, we wrap it as a set
+        // actually, let's just return the expression node - the default handler will eval it
         return node;
     }
     
@@ -894,7 +894,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
             node->channelName = name;
             return node;
         }
-        // "create an object called X with the following properties:"
+        // "create an object called x with the following properties:"
         if (match(T_AN) || match(T_A)) {
             match(T_OBJECT); match(T_CALLED);
             std::string name = advance().value;
@@ -930,7 +930,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
     
     // "send x to channel y"
     if (match(T_SEND)) {
-        // Check if it's "send http ..."
+        // check if it's "send http ..."
         if (check(T_HTTP)) {
             match(T_HTTP);
             if (match(T_GET)) {
@@ -940,7 +940,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
                 node->url = url;
                 return node;
             }
-            // HTTP POST: "send http post request to X with body Y"
+            // http post: "send http post request to x with body y"
             match(T_REQUEST); match(T_TO);
             auto url = expression();
             std::shared_ptr<ASTNode> body = nullptr;
@@ -985,7 +985,7 @@ std::shared_ptr<ASTNode> Parser::statement() {
     // "run the command x" / "run command x and capture output in y"
     if (match(T_RUN)) {
         match(T_THE);
-        // Skip "command" if it appears as an identifier
+        // skip "command" if it appears as an identifier
         if (check(T_IDENTIFIER) && peek().value == "command") advance();
         auto cmd = expression();
         auto node = std::make_shared<RunCommandNode>();

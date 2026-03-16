@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // lexer.cpp - tokenizer implementation
 #include "Lexer.h"
 #include <stdexcept>
@@ -222,8 +222,8 @@ Token Lexer::readString() {
     std::string str;
     while (!isAtEnd() && peek() != '"') {
         if (peek() == '\\' && peekNext() == '"') {
-            advance(); // Skip backslash
-            str += advance(); // Add quote
+            advance(); // skip backslash
+            str += advance(); // add quote
         } else {
             str += advance();
         }
@@ -231,7 +231,7 @@ Token Lexer::readString() {
     if (isAtEnd()) {
         throw std::runtime_error("Line " + std::to_string(line) + ": Unterminated string.");
     }
-    advance(); // Skip closing quote
+    advance(); // skip closing quote
     return makeToken(T_STRING, processEscapeSequences(str));
 }
 
@@ -255,9 +255,9 @@ Token Lexer::readIdentifier() {
         Token tok = (it != keywords.end()) 
             ? makeToken(it->second, id)
             : makeToken(T_IDENTIFIER, id);
-        advance(); // Skip '
-        advance(); // Skip s
-        // The caller should handle the possessive by emitting a DOT token next
+        advance(); // skip '
+        advance(); // skip s
+        // the caller should handle the possessive by emitting a dot token next
         return tok;
     }
     

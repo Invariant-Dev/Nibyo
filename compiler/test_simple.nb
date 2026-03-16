@@ -1,10 +1,10 @@
-# Test 1: Simple display
+# test 1: simple display
 display "Welcome"
 
-# Test 2: Set with array
+# test 2: set with array
 set tasks to []
 
-# Test 3: If with exists
+# test 3: if with exists
 if "todo.txt" exists do:
     display "File exists"
 end if

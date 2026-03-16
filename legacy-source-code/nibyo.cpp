@@ -1,6 +1,6 @@
-// Project Nexo v4.0 -> Full-featured esoteric language
-// Compile: g++ -std=c++17 -O3 nexo.cpp -o nexo.exe -static -static-libgcc -static-libstdc++ -pthread
-// Usage: ./nexo.exe program.nx
+// project nibyo v4.0 -> full-featured esoteric language
+// compile: g++ -std=c++17 -o3 nibyo.cpp -o nibyo.exe -static -static-libgcc -static-libstdc++ -pthread
+// usage: ./nibyo.exe program.nb
 
 #include <iostream>
 #include <fstream>
@@ -25,7 +25,7 @@
 
 using namespace std;
 
-// Forward declarations
+// forward declarations
 struct ASTNode;
 struct Value;
 class Environment;
@@ -65,7 +65,7 @@ struct Mailbox {
     }
 };
 
-// Global state
+// global state
 mutex output_mutex;
 mutex task_registry_mutex;
 map<string, bool> task_registry;
@@ -79,7 +79,7 @@ struct FunctionValue {
     function<shared_ptr<Value>(const vector<shared_ptr<Value>>&)> nativeImpl;
 };
 
-// Small string interning pool to save memory and speed up comparisons
+// small string interning pool to save memory and speed up comparisons
 class StringPool {
     unordered_set<string> pool;
 public:
@@ -143,8 +143,8 @@ public:
     Environment(shared_ptr<Environment> p = nullptr) : parent(p) {}
 
     Environment(const Environment& other) : vars(other.vars), parent(other.parent) {
-        // We manually copy vars and parent, but let the mutex be default-constructed (unlocked).
-        // This allows creating a copy of the environment for new threads.
+        // we manually copy vars and parent, but let the mutex be default-constructed (unlocked).
+        // this allows creating a copy of the environment for new threads.
     }
     
     void set(const string& name, shared_ptr<Value> val) {
@@ -164,7 +164,7 @@ public:
     }
 };
 
-// AST Nodes
+// ast nodes
 struct ASTNode { virtual ~ASTNode() = default; };
 struct NumberNode : ASTNode { double value; };
 struct TextNode : ASTNode { string value; };
@@ -267,7 +267,7 @@ enum TT {
     T_PLEASE, T_SEND, T_REQUEST, T_POST, T_LBRACE, T_RBRACE,
     T_ENVIRONMENT, T_VARIABLE, T_DOT, T_RUN, T_CAPTURE, T_OUTPUT, T_OBJECT,
     T_CHANNEL, T_CREATE, T_RECEIVE, T_LOAD, T_NATIVE, T_TRACE,
-    // Natural language tokens
+    // natural language tokens
     T_SAME, T_EXACTLY, T_BECOMES, T_INCREASE, T_INCREMENT, T_ASK, T_THEN, T_MORE, T_FIRST, T_THIRD, T_ITEM, T_LAST
 };
 
@@ -320,7 +320,7 @@ class Lexer {
         {"run", T_RUN}, {"capture", T_CAPTURE}, {"output", T_OUTPUT},
         {"object", T_OBJECT}, {"channel", T_CHANNEL}, {"create", T_CREATE},
         {"receive", T_RECEIVE}, {"load", T_LOAD}, {"native", T_NATIVE}, {"trace", T_TRACE},
-        // Natural language synonyms
+        // natural language synonyms
         {"same", T_SAME}, {"exactly", T_EXACTLY}, {"becomes", T_BECOMES}, {"become", T_BECOMES}, {"increase", T_INCREASE}, {"increment", T_INCREMENT},
         {"ask", T_ASK}, {"then", T_THEN}, {"more", T_MORE}, {"first", T_FIRST}, {"second", T_SECOND}, {"third", T_THIRD}, {"item", T_ITEM}, {"last", T_LAST}
     };
@@ -394,7 +394,7 @@ public:
                 string id;
                 while(isalnum(peek()) || peek() == '_') id += adv();
                 if(isNoiseWord(id)) continue;
-                // Support possessive "user's name" => user . name
+                // support possessive "user's name" => user . name
                 if(peek() == '\'' && p + 1 < s.size() && s[p+1] == 's') {
                     ts.push_back({kw.count(id) ? kw[id] : T_ID, id, line});
                     // consume '\'s' sequence
@@ -462,7 +462,7 @@ class Parser {
         auto l = addExpr();
         if(match(T_IS)) {
             string op;
-            // Natural phrases: 'is same as' (noise word 'the' already filtered), 'is exactly', etc.
+            // natural phrases: 'is same as' (noise word 'the' already filtered), 'is exactly', etc.
             if(match(T_SAME)) { if(peek().type == T_AS) adv(); op = "=="; }
             else if(match(T_EXACTLY)) { op = "=="; }
             else if(match(T_NOT) && match(T_SAME)) { if(peek().type == T_AS) adv(); op = "!="; }
@@ -473,7 +473,7 @@ class Parser {
                 if(match(T_LEAST)) op = ">=";
                 else if(match(T_MOST)) op = "<=";
             } else if(match(T_EQUAL)) { if(match(T_TO)) {} op = "=="; }
-            // default: 'is X' -> equality
+            // default: 'is x' -> equality
             if(op.empty()) op = "==";
             auto r = addExpr();
             auto n = make_shared<BinaryOpNode>();
@@ -507,7 +507,7 @@ class Parser {
         return l;
     }
     
-    // Handle postfix operations like dot notation
+    // handle postfix operations like dot notation
     shared_ptr<ASTNode> postfixExpr() {
         auto l = unaryExpr();
         
@@ -522,7 +522,7 @@ class Parser {
             l = n;
         }
 
-        // Postfix 'exists' -> FileExistsNode where the left expression is the filepath
+        // postfix 'exists' -> fileexistsnode where the left expression is the filepath
         if(match(T_EXISTS)) {
             auto n = make_shared<FileExistsNode>();
             n->filepath = l;
@@ -555,7 +555,7 @@ class Parser {
             return n;
         }
         if(peek().type == T_STR) {
-            // Natural concatenation: adjacent strings or 'and' separated strings join together
+            // natural concatenation: adjacent strings or 'and' separated strings join together
             string combined = adv().value;
             while(true) {
                 if(peek().type == T_STR) {
@@ -573,7 +573,7 @@ class Parser {
         if(match(T_TRUE)) { auto n = make_shared<BoolNode>(); n->value = true; return n; }
         if(match(T_FALSE)) { auto n = make_shared<BoolNode>(); n->value = false; return n; }
 
-        // Natural: 'length of tasks' -> LengthOfNode
+        // natural: 'length of tasks' -> lengthofnode
         if(match(T_LENGTH)) {
             expect(T_OF, "Expected 'of'");
             auto n = make_shared<LengthOfNode>();
@@ -581,7 +581,7 @@ class Parser {
             return n;
         }
         
-        // Lambda (anonymous function) - short and long forms
+        // lambda (anonymous function) - short and long forms
         if(match(T_FUNC)) {
             auto n = make_shared<LambdaNode>();
             if(match(T_WITH)) {
@@ -593,7 +593,7 @@ class Parser {
                 expect(T_END, "Expected 'end'");
                 if(peek().type == T_FUNC) adv();
             } else {
-                // short form: function x return EXPR
+                // short form: function x return expr
                 n->params.push_back(adv().value);
                 expect(T_RETURN, "Expected 'return'");
                 auto r = make_shared<ReturnNode>();
@@ -603,11 +603,11 @@ class Parser {
             return n;
         }
 
-        // Natural indexing: 'first item in colors' or 'item 1 of colors'
+        // natural indexing: 'first item in colors' or 'item 1 of colors'
         if(match(T_FIRST) || match(T_SECOND) || match(T_THIRD) || match(T_LAST)) {
             int idx = 0; if(ts[p-1].type == T_SECOND) idx = 1; if(ts[p-1].type == T_THIRD) idx = 2;
             if(match(T_LAST)) {
-                // produce a GetLastNode
+                // produce a getlastnode
                 if(match(T_ITEM)) {}
                 expect(T_IN, "Expected 'in'");
                 string arr = adv().value;
@@ -867,7 +867,7 @@ class Parser {
         
         if(match(T_OBJECT)) {
             expect(T_WITH, "Expected 'with'");
-            match(T_COLON); // optional ':' for natural English
+            match(T_COLON); // optional ':' for natural english
             auto n = make_shared<MapNode>();
             while(peek().type == T_ID) {
                 string key = adv().value;
@@ -956,7 +956,7 @@ class Parser {
     }
     
     shared_ptr<ASTNode> stmt() {
-        // Allow implied assignment: 'x is 10' or 'x becomes 10'
+        // allow implied assignment: 'x is 10' or 'x becomes 10'
         if(peek().type == T_ID && peekNext().type == T_IS) {
             auto n = make_shared<SetNode>();
             n->name = adv().value; // id
@@ -972,13 +972,13 @@ class Parser {
             return n;
         }
 
-        // Shorthand increment: 'increase x by 5' or 'increment x'
+        // shorthand increment: 'increase x by 5' or 'increment x'
         if(match(T_INCREASE)) {
             string name = adv().value;
             shared_ptr<ASTNode> byVal;
             if(match(T_BY)) byVal = expr();
             else { auto nv = make_shared<NumberNode>(); nv->value = 1; byVal = nv; }
-            // transform into set name to name + byVal
+            // transform into set name to name + byval
             auto n = make_shared<SetNode>(); n->name = name;
             auto left = make_shared<IdentifierNode>(); left->name = name;
             auto bin = make_shared<BinaryOpNode>(); bin->left = left; bin->right = byVal; bin->op = "+";
@@ -997,7 +997,7 @@ class Parser {
             auto n = make_shared<SetNode>();
             n->name = adv().value;
             
-            // Handle dot notation: set x.field to value
+            // handle dot notation: set x.field to value
             if(peek().type == T_DOT) {
                 auto objNode = make_shared<IdentifierNode>();
                 objNode->name = n->name;
@@ -1122,7 +1122,7 @@ class Parser {
         if(match(T_IF)) {
             auto n = make_shared<IfNode>();
             n->condition = expr();
-            if(match(T_THEN)) { // single-line 'If x is 10 then display "Success"'
+            if(match(T_THEN)) { // single-line 'if x is 10 then display "success"'
                 n->thenBlock.push_back(stmt());
                 return n;
             }
@@ -1242,7 +1242,7 @@ class Parser {
         
         if(match(T_WRITE)) {
             auto content = expr();
-            // allow either 'into' or plain 'to' for natural 'save X to file Y'
+            // allow either 'into' or plain 'to' for natural 'save x to file y'
             if(!(match(T_INTO) || match(T_TO))) expect(T_INTO, "Expected 'into' or 'to'");
             expect(T_FILE, "Expected 'file'");
             auto filepath = expr();
@@ -1333,7 +1333,7 @@ public:
     }
 };
 
-// Interpreter
+// interpreter
 class ReturnException : public exception {
 public:
     shared_ptr<Value> value;
@@ -1986,7 +1986,7 @@ class Interpreter {
         else if(auto n = dynamic_pointer_cast<LoadNativeNode>(node)) {
             auto libNameVal = eval(n->lib);
             string libName = libNameVal->text;
-            // Built-in 'math' module for examples
+            // built-in 'math' module for examples
             if(libName == "math") {
                 auto mod = make_shared<Value>();
                 mod->type = Value::MAP;
@@ -2193,7 +2193,7 @@ public:
 
 int main(int argc, char** argv) {
     string code = R"(
-display "=== Nexo v4.0 - Full Feature Demo ==="
+display "=== Nibyo v4.0 - Full Feature Demo ==="
 display ""
 
 # DEMO 1: DOT NOTATION FOR OBJECTS
@@ -2225,20 +2225,20 @@ display ""
 
 # DEMO 3: SYSTEM COMMANDS
 display "3. Running System Commands:"
-set output to run "echo Hello from Nexo" and capture output
+set output to run "echo Hello from Nibyo" and capture output
 display "Command output: " + output
 display ""
 
 # DEMO 4: FILE OPERATIONS
 display "4. File Operations:"
-write "Nexo is awesome!" into file "test.txt"
+write "Nibyo is awesome!" into file "test.txt"
 set content to read file "test.txt"
 display "File content: " + content
 display ""
 
 # DEMO 5: JSON PARSING
 display "5. JSON Parse & Stringify:"
-set json_str to "{\"product\": \"Nexo\", \"version\": 4.0}"
+set json_str to "{\"product\": \"Nibyo\", \"version\": 4.0}"
 set data to parse json_str
 display "Parsed product: " + data.product
 display ""

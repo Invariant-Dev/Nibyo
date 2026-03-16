@@ -1,38 +1,38 @@
-# Nexo v5.0 - GUI Application Showcase
-# This program demonstrates the new natural language GUI syntax
+# nibyo v5.0 - gui application example
+# this program demonstrates the new natural language gui syntax
 
-# State variables
+# state variables
 set the count to 0
-set the app_title to "Nexo Desktop Counter"
+set the app_title to "Nibyo Desktop Counter"
 set the message to "Welcome to the future of coding!"
 
-# Define a function to increment the counter
+# define a function to increment the counter
 define function called increment_counter:
     set the count to count + 1
     display "Counter is now " joined with count
 end function
 
-# Define a function to reset the counter
+# define a function to reset the counter
 define function called reset_counter:
     set the count to 0
     display "Counter reset!"
 end function
 
-# Main GUI Window
+# main gui window
 open gui window with name app_title and size 400 by 300:
     
-    # Background and static text
+    # background and static text
     draw rectangle at position 0 by 0 with size 400 by 100 and color blue
-    draw text "Nexo Counter App" at position 100 by 35 with color white
+    draw text "Nibyo Counter App" at position 100 by 35 with color white
     
-    # Dynamic display of counter
+    # dynamic display of counter
     draw text "Current Count:" at position 140 by 120 with color black
     draw text count at position 190 by 150 with color red
     
-    # The message display
+    # the message display
     draw text message at position 50 by 250 with color gray
     
-    # Interactive Buttons
+    # interactive buttons
     create button called plusButton with label "Increment" at position 150 by 180:
         call the function increment_counter
         set the message to "You clicked the plus button!"

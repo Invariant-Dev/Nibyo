@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // ast.h - abstract syntax tree node definitions with fast nodetype dispatch
 #pragma once
 

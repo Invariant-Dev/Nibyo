@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // common.cpp - global state implementations
 #include "Common.h"
 #include "Value.h"

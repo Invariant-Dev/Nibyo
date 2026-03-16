@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150/000000/FFFFFF?text=Nexo+v1.0+beta" alt="Nexo Logo" width="150" height="150"/>
+  <img src="https://via.placeholder.com/150/000000/FFFFFF?text=Nibyo+v1.0+beta" alt="Nibyo Logo" width="150" height="150"/>
   
-  # Nexo v1.0 beta
+  # Nibyo v1.0 beta
   **The Programming Language That Speaks English.**
   
   [![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -12,9 +12,9 @@
 
 ---
 
-## 👋 Welcome to Nexo!
+## 👋 Welcome to Nibyo!
 
-Nexo is a personal side-project I have been working on for around a year. It's an experimental programming language designed to bridge the gap between human thought and machine execution. If you can describe it in English, you can code it in Nexo! 
+Nibyo is a personal side-project I have been working on for around a year. It's an experimental programming language designed to bridge the gap between human thought and machine execution. If you can describe it in English, you can code it in Nibyo! 
 
 While this is currently the **v1.0 beta** release, I have big plans to expand the language, add new features, and continue refining the engine in the future.
 
@@ -22,7 +22,7 @@ Gone are the days of cryptic syntax, curly braces, and semicolons. The v1.0 beta
 
 ---
 
-## ⚡ Why Nexo?
+## ⚡ Why Nibyo?
 
 - 🧠 **Zero Learning Curve**: Reads almost exactly like pseudocode.
 - 🚀 **Blazing Fast**: The v1.0 beta engine features optimized AST dispatch and memory pooling.
@@ -35,7 +35,7 @@ Gone are the days of cryptic syntax, curly braces, and semicolons. The v1.0 beta
 
 ## 🚀 Installation
 
-Getting Nexo up and running is incredibly simple. All you need is a modern C++ compiler (C++17 or higher).
+Getting Nibyo up and running is incredibly simple. All you need is a modern C++ compiler (C++17 or higher).
 
 ### Prerequisites
 - **Windows**: [MinGW-w64](https://www.mingw-w64.org/) (provides `g++`)
@@ -43,7 +43,7 @@ Getting Nexo up and running is incredibly simple. All you need is a modern C++ c
 - **Linux**: GCC (`sudo apt install g++`)
 
 ### 📦 Prebuilt Binaries
-Don't want to compile from source? You can download the latest prebuilt binaries for Windows, Linux, and macOS directly from the **[Releases](https://github.com/Invariant-Dev/Nexo/releases)** section of this repository.
+Don't want to compile from source? You can download the latest prebuilt binaries for Windows, Linux, and macOS directly from the **[Releases](https://github.com/Invariant-Dev/Nibyo/releases)** section of this repository.
 
 1. Download the version for your OS.
 2. Add the executable to your system PATH for easy access.
@@ -52,42 +52,42 @@ Don't want to compile from source? You can download the latest prebuilt binaries
 
 1. **Clone the repository** (or download the source code):
    ```bash
-   git clone https://github.com/Invariant-Dev/project-nexo.git
-   cd "project-nexo/new_source_code"
+   git clone https://github.com/Invariant-Dev/Nibyo.git
+   cd "project-nibyo/new_source_code"
    ```
 
 2. **Compile the engine**:
    ```bash
-   g++ -std=c++17 -O3 Common.cpp Lexer.cpp Parser.cpp Interpreter.cpp main.cpp -o nexo -static -static-libgcc -static-libstdc++ -pthread
+   g++ -std=c++17 -O3 Common.cpp Lexer.cpp Parser.cpp Interpreter.cpp main.cpp -o nibyo -static -static-libgcc -static-libstdc++ -pthread
    ```
-   *Note: On Windows, the output will automatically be `nexo.exe`.*
+   *Note: On Windows, the output will automatically be `nibyo.exe`.*
 
 3. **Verify the installation**:
    ```bash
-   ./nexo --version
+   ./nibyo --version
    ```
 
 ---
 
 ## 💻 Getting Started
 
-You can use Nexo by running script files.
+You can use Nibyo by running script files.
 
 ### Running a Script
 
-1. Create a file named `hello.nx`:
-   ```nexo
+1. Create a file named `hello.nb`:
+   ```nibyo
    display "Hello, world!"
    set user to "Alice"
-   display "Welcome to Nexo, " + user + "!"
+   display "Welcome to Nibyo, " + user + "!"
    ```
 
 2. Execute the script:
    ```bash
-   ./nexo hello.nx
+   ./nibyo hello.nb
    ```
 
-> **Pro Tip**: Nexo ignores "noise words" like `the`, `a`, `an`, and `please`. 
+> **Pro Tip**: Nibyo ignores "noise words" like `the`, `a`, `an`, and `please`. 
 > Writing `set the user to "Alice"` works exactly the same as `set user to "Alice"`! Use the noise words simply for readability.
 
 ---
@@ -95,15 +95,15 @@ You can use Nexo by running script files.
 ## 📖 Language Guide Tour
 
 ### Variables & Data Types
-```nexo
-set the name to "Nexo"
+```nibyo
+set the name to "Nibyo"
 set version to 1.0
 set is_awesome to true
 set the empty_list to []
 ```
 
 ### Objects
-```nexo
+```nibyo
 set config to an object called myConfig with the following properties:
     host is "localhost"
     port is 8080
@@ -115,7 +115,7 @@ set config.port to 443
 ```
 
 ### Arrays & Iteration
-```nexo
+```nibyo
 set colors to ["red", "green", "blue"]
 add "yellow" to colors
 
@@ -127,7 +127,7 @@ display "There are " + length of colors + " colors."
 ```
 
 ### Control Flow
-```nexo
+```nibyo
 set limit to 10
 if limit is greater than 5 then do the following:
     display "Limit is high!"
@@ -141,7 +141,7 @@ end iterate
 ```
 
 ### Functions & Logic
-```nexo
+```nibyo
 define function called calculate_area with width, height:
     return width * height
 end function
@@ -151,7 +151,7 @@ display "Area is " + area
 ```
 
 ### String Wizardry
-```nexo
+```nibyo
 set text to "The quick brown fox"
 if text contains "quick" do the following:
     display replace "fox" with "wolf" in text
@@ -164,11 +164,11 @@ display substring of text from 4 with length 5  # Outputs: quick
 
 ## 🌟 Example Projects
 
-Here are a few real-world examples to show you how powerful Nexo can be.
+Here are a few real-world examples to show you how powerful Nibyo can be.
 
 ### 📝 1. To-Do List Manager (File I/O & JSON)
-```nexo
-display "=== Nexo Task Manager ==="
+```nibyo
+display "=== Nibyo Task Manager ==="
 
 set file_path to "tasks.json"
 
@@ -179,7 +179,7 @@ otherwise do the following:
     set tasks to []
 end if
 
-add "Learn Nexo v1.0 beta" to tasks
+add "Learn Nibyo v1.0 beta" to tasks
 add "Build an awesome app" to tasks
 
 write stringify tasks into the file file_path
@@ -187,7 +187,7 @@ display "Saved " + length of tasks + " tasks to disk."
 ```
 
 ### 🌐 2. Web API Fetcher (HTTP & JSON)
-```nexo
+```nibyo
 display "Fetching weather data..."
 
 set city to "London"
@@ -205,7 +205,7 @@ end try
 ```
 
 ### 🚀 3. High-Concurrency Worker Pool
-```nexo
+```nibyo
 display "Starting background workers..."
 
 create channel called "jobs_queue"
@@ -252,7 +252,7 @@ We're working on bringing syntax highlighting to your favorite editors!
 
 ## 🤝 Contributing
 
-Nexo is a community-driven side-project! If you want to contribute to the v1.0 beta engine:
+Nibyo is a community-driven side-project! If you want to contribute to the v1.0 beta engine:
 1. Fork the repository.
 2. Check out the `new_source_code` directory.
 3. The core engine lives in `Interpreter.cpp` and `Parser.cpp`. Feel free to implement new AST nodes!

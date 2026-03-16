@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // interpreter.cpp - high-performance runtime execution engine
 #include "Interpreter.h"
 #include "Lexer.h"
@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <random>
 
-// fast node cast - uses static_cast since we verify via nodeType
+// fast node cast - uses static_cast since we verify via nodetype
 template<typename T>
 static inline T* as(const std::shared_ptr<ASTNode>& node) {
     return static_cast<T*>(node.get());
@@ -1044,7 +1044,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         int w = static_cast<int>(eval(n->width)->number);
         int h = static_cast<int>(eval(n->height)->number);
         
-        #ifdef NEXO_GUI_SUPPORT
+        #ifdef NIBYO_GUI_SUPPORT
         InitWindow(w, h, title.c_str());
         SetTargetFPS(60);
         while (!WindowShouldClose()) {
@@ -1070,7 +1070,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         int x = static_cast<int>(eval(n->x)->number);
         int y = static_cast<int>(eval(n->y)->number);
         int size = n->fontSize ? static_cast<int>(eval(n->fontSize)->number) : 20;
-        #ifdef NEXO_GUI_SUPPORT
+        #ifdef NIBYO_GUI_SUPPORT
         DrawText(text.c_str(), x, y, size, BLACK);
         #else
         std::lock_guard<std::mutex> lock(output_mutex);
@@ -1084,7 +1084,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         int y = static_cast<int>(eval(n->y)->number);
         int w = static_cast<int>(eval(n->width)->number);
         int h = static_cast<int>(eval(n->height)->number);
-        #ifndef NEXO_GUI_SUPPORT
+        #ifndef NIBYO_GUI_SUPPORT
         std::lock_guard<std::mutex> lock(output_mutex);
         std::cout << "[GUI] Rectangle: (" << x << "," << y << ") " << w << "x" << h << " color=" << n->color << std::endl;
         #endif
@@ -1095,7 +1095,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         int x = static_cast<int>(eval(n->x)->number);
         int y = static_cast<int>(eval(n->y)->number);
         int r = static_cast<int>(eval(n->radius)->number);
-        #ifndef NEXO_GUI_SUPPORT
+        #ifndef NIBYO_GUI_SUPPORT
         std::lock_guard<std::mutex> lock(output_mutex);
         std::cout << "[GUI] Circle: (" << x << "," << y << ") r=" << r << " color=" << n->color << std::endl;
         #endif
@@ -1104,7 +1104,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
     case NodeType::GUIButton: {
         auto n = as<GUIButtonNode>(node);
         std::string label = eval(n->label)->toString();
-        #ifndef NEXO_GUI_SUPPORT
+        #ifndef NIBYO_GUI_SUPPORT
         std::lock_guard<std::mutex> lock(output_mutex);
         std::cout << "[GUI] Button '" << n->name << "': " << label << std::endl;
         #endif
@@ -1112,7 +1112,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
     }
     case NodeType::GUITextInput: {
         auto n = as<GUITextInputNode>(node);
-        #ifndef NEXO_GUI_SUPPORT
+        #ifndef NIBYO_GUI_SUPPORT
         std::lock_guard<std::mutex> lock(output_mutex);
         std::cout << "[GUI] TextInput '" << n->name << "'" << std::endl;
         #endif
@@ -1122,7 +1122,7 @@ void Interpreter::execute(std::shared_ptr<ASTNode> node) {
         return;
     
     default:
-        // Expression statements - evaluate for side effects
+        // expression statements - evaluate for side effects
         eval(node);
         return;
     }

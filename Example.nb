@@ -1,19 +1,19 @@
-# Nexo v5.0 - Showcase Example
-# This program demonstrates almost every feature of the language
+# nibyo v5.0 - example example
+# this program demonstrates almost every feature of the language
 
 display "===================================="
-display "      Nexo v5.0 Showcase App        "
+display "      Nibyo v5.0 Showcase App        "
 display "===================================="
 
-# 1. Variables and Data Types
-set the app_name to "Nexo Evolution"
+# 1. variables and data types
+set the app_name to "Nibyo Evolution"
 set the version to 5.0
 set the features to a list containing "English Syntax", "GUI Support", "Concurrency"
 set the is_stable to true
 
 display "Running " joined with app_name joined with " v" joined with version
 
-# 2. Objects and Lists
+# 2. objects and lists
 create an object called user with the following properties:
     name is "Engineer"
     role is "Creator"
@@ -24,7 +24,7 @@ display "User name: " joined with user.name
 add "Networking" to features
 display "Features: " joined with features
 
-# 3. Math and Logic
+# 3. math and logic
 set the radius to 5
 set the area to 3.14159 * (radius raised to the power of 2)
 display "Area of circle: " joined with area
@@ -35,7 +35,7 @@ otherwise do the following:
     display "Please upgrade!"
 end if
 
-# 4. Functions
+# 4. functions
 define function called calculate_sum with parameters a and b:
     display "Adding " joined with a joined with " and " joined with b
     return a + b
@@ -44,15 +44,15 @@ end function
 set the total to call the function calculate_sum with 10 and 20
 display "Total: " joined with total
 
-# 5. File I/O (Simulated/Safe)
-write "Nexo was here" into the file "nexo_log.txt"
-if "nexo_log.txt" exists then do the following:
+# 5. file i/o (simulated/safe)
+write "Nibyo was here" into the file "nibyo_log.txt"
+if "nibyo_log.txt" exists then do the following:
     display "Log file created successfully."
-    set the content to read the file "nexo_log.txt"
+    set the content to read the file "nibyo_log.txt"
     display "File content: " joined with content
 end if
 
-# 6. Concurrency and Channels
+# 6. concurrency and channels
 create channel called sync_channel
 in the background as update_task do the following:
     wait 1 seconds
@@ -63,9 +63,9 @@ display "Waiting for background task..."
 receive from channel sync_channel and store it in status
 display "Status: " joined with status
 
-# 7. GUI Showcase
+# 7. gui example
 display "Attempting to open GUI..."
-open gui window with name "Nexo Showcase" and size 400 by 300:
+open gui window with name "Nibyo Showcase" and size 400 by 300:
     draw rectangle at position 0 by 0 with size 400 by 80 and color blue
     draw text "Hello World" at position 120 by 30 with color white
     

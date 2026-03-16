@@ -1,43 +1,43 @@
 {
-  "name": "nexo-lang",
-  "displayName": "Nexo Language Support",
+  "name": "nibyo-lang",
+  "displayName": "Nibyo Language Support",
   "version": "1.0.0",
   "publisher": "yourname",
-  "description": "Language support for Nexo: The language easier than pseudocode.",
+  "description": "Language support for Nibyo: The language easier than pseudocode.",
   "main": "./extension.js",
   "engines": {
     "vscode": "^1.60.0"
   },
   "categories": ["Programming Languages"],
-  "activationEvents": ["onLanguage:nexo"],
+  "activationEvents": ["onLanguage:nibyo"],
   "contributes": {
     "commands": [{
-      "command": "nexo.runFile",
-      "title": "Run Nexo File",
-      "category": "Nexo"
+      "command": "nibyo.runFile",
+      "title": "Run Nibyo File",
+      "category": "Nibyo"
     }],
     "menus": {
       "editor/title": [{
-        "command": "nexo.runFile",
+        "command": "nibyo.runFile",
         "group": "navigation",
-        "when": "editorLangId == nexo"
+        "when": "editorLangId == nibyo"
       }],
       "editor/context": [{
-        "command": "nexo.runFile",
+        "command": "nibyo.runFile",
         "group": "navigation",
-        "when": "editorLangId == nexo"
+        "when": "editorLangId == nibyo"
       }]
     },
     "languages": [{
-      "id": "nexo",
-      "aliases": ["Nexo", "nexo"],
-      "extensions": [".nx", ".nexo"],
+      "id": "nibyo",
+      "aliases": ["Nibyo", "nibyo"],
+      "extensions": [".nb", ".nibyo"],
       "configuration": "./language-configuration.json"
     }],
     "grammars": [{
-      "language": "nexo",
-      "scopeName": "source.nexo",
-      "path": "./syntaxes/nexo.tmLanguage.json"
+      "language": "nibyo",
+      "scopeName": "source.nibyo",
+      "path": "./syntaxes/nibyo.tmLanguage.json"
     }]
   }
 }

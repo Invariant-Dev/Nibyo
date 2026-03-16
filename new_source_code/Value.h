@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // value.h - core value types and environment (optimized)
 #pragma once
 
@@ -25,7 +25,7 @@ public:
 // forward declaration
 struct FunctionValue;
 
-// core value type - represents any nexo value
+// core value type - represents any nibyo value
 struct Value {
     enum Type { 
         NONE, 

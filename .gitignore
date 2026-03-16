@@ -2,7 +2,7 @@
 *.exe
 *.o
 *.out
-nexo
+nibyo
 
 # IDEs
 .vscode/

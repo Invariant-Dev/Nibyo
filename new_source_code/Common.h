@@ -1,4 +1,4 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // common.h - forward declarations, includes, and global state
 #pragma once
 

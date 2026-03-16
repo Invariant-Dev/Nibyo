@@ -1,43 +1,43 @@
 @echo off
-REM Nexo v5.0 Build Script for Windows
-REM Usage: build.bat
+REM nibyo v1.0 beta build script for windows
+REM usage: build.bat
 
-echo  Nexo v5.0 - Build Script
+echo  nibyo v1.0 beta - build script
 echo.
 
-REM Check if g++ is available
+REM check if g++ is available
 where g++ >nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    echo Error: g++ not found. Please install MinGW-w64 or add it to PATH.
+    echo error: g++ not found. please install mingw-w64 or add it to path.
     pause
     exit /b 1
 )
 
-echo Compiling Nexo v5.0...
+echo compiling nibyo v1.0 beta...
 echo.
 
-REM Compile all .cpp files
+REM compile all .cpp files
 g++ -std=c++17 -O3 ^
     Common.cpp ^
     Lexer.cpp ^
     Parser.cpp ^
     Interpreter.cpp ^
     main.cpp ^
-    -o nexo.exe ^
+    -o nibyo.exe ^
     -static -static-libgcc -static-libstdc++ -pthread
 
 if %ERRORLEVEL% neq 0 (
     echo.
-    echo Build FAILED!
+    echo build failed!
     pause
     exit /b 1
 )
 
 echo.
 echo ========================================
-echo  Build successful: nexo.exe
+echo  build successful: nibyo.exe
 echo ========================================
 echo.
-echo Usage: .\nexo.exe your_program.nx
+echo usage: .\nibyo.exe your_program.nb
 echo.
 pause

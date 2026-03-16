@@ -1,7 +1,7 @@
-// nexo v1.0 beta - natural english programming language
+// nibyo v1.0 beta - natural english programming language
 // main.cpp - entry point
-// compile: g++ -std=c++17 -o3 *.cpp -o nexo.exe -static -pthread
-// usage: .\nexo.exe .\program.nx
+// compile: g++ -std=c++17 -o3 *.cpp -o nibyo.exe -static -pthread
+// usage: .\nibyo.exe .\program.nb
 
 #include "Common.h"
 #include "Lexer.h"
@@ -12,13 +12,13 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
-    // usage: nexo.exe file.nx
+    // usage: nibyo.exe file.nb
     if (argc != 2) {
-        std::cerr << "nexo v1.0 beta - natural english programming language" << std::endl;
-        std::cerr << "Usage: " << argv[0] << " <program.nx>" << std::endl;
+        std::cerr << "nibyo v1.0 beta - natural english programming language" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <program.nb>" << std::endl;
         std::cerr << std::endl;
         std::cerr << "Example:" << std::endl;
-        std::cerr << "  " << argv[0] << " hello.nx" << std::endl;
+        std::cerr << "  " << argv[0] << " hello.nb" << std::endl;
         return 1;
     }
     
